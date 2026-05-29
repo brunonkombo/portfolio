@@ -747,39 +747,66 @@ async function loadFeed(){
   const ts=document.getElementById('feed-ts');
   el.innerHTML='<div class="feed-loading">Chargement des actualités ZTNA…</div>';
 
-  // Multiple CORS proxies + RSS sources as fallbacks
   const rssUrl='https://news.google.com/rss/search?q=ZTNA+Zero+Trust+Network+Access&hl=fr&gl=FR&ceid=FR:fr';
-  const proxies=[
-    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=6`,
-    `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`
+  const enc=encodeURIComponent(rssUrl);
+
+  // Try multiple proxies in sequence
+  const attempts=[
+    // 1. rss2json API
+    async()=>{
+      const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${enc}&count=6&api_key=`);
+      const d=await r.json();
+      if(d.status==='ok'&&d.items?.length>0)
+        return d.items.map(i=>({title:i.title,link:i.link,date:i.pubDate,source:i.author||'Google News'}));
+      throw new Error('rss2json failed');
+    },
+    // 2. corsproxy.io
+    async()=>{
+      const r=await fetch(`https://corsproxy.io/?${enc}`);
+      return parseXML(await r.text());
+    },
+    // 3. allorigins raw
+    async()=>{
+      const r=await fetch(`https://api.allorigins.win/raw?url=${enc}`);
+      return parseXML(await r.text());
+    },
+    // 4. allorigins get (wrapped JSON)
+    async()=>{
+      const r=await fetch(`https://api.allorigins.win/get?url=${enc}`);
+      const d=await r.json();
+      return parseXML(d.contents);
+    }
   ];
 
-  // Try rss2json first
-  try{
-    const r=await fetch(proxies[0]);
-    const d=await r.json();
-    if(d.status==='ok'&&d.items&&d.items.length>0){
-      renderItems(d.items.map(i=>({title:i.title,link:i.link,date:i.pubDate,source:i.author})));
-      return;
-    }
-  }catch(e){}
+  for(const attempt of attempts){
+    try{
+      const items=await attempt();
+      if(items&&items.length>0){renderItems(items);return;}
+    }catch(e){}
+  }
 
-  // Fallback: allorigins proxy + XML parsing
-  try{
-    const r=await fetch(proxies[1]);
-    const d=await r.json();
-    const parser=new DOMParser();
-    const xml=parser.parseFromString(d.contents,'text/xml');
-    const items=[...xml.querySelectorAll('item')].slice(0,6).map(item=>({
+  el.innerHTML=`<div class="feed-error">Flux momentanément indisponible.<br>
+    <span style="font-size:.75rem;opacity:.6">
+      <a href="https://news.google.com/search?q=ZTNA+Zero+Trust+Network+Access&hl=fr" target="_blank" style="color:var(--mint)">Voir sur Google News ↗</a>
+    </span></div>`;
+}
+
+function parseXML(text){
+  const parser=new DOMParser();
+  const xml=parser.parseFromString(text,'text/xml');
+  const items=[...xml.querySelectorAll('item')].slice(0,6);
+  if(!items.length) throw new Error('no items');
+  return items.map(item=>{
+    const link=item.querySelector('link')?.textContent||item.querySelector('guid')?.textContent||'#';
+    let source='Google News';
+    try{source=new URL(link).hostname.replace('www.','');}catch(e){}
+    return{
       title:item.querySelector('title')?.textContent||'',
-      link:item.querySelector('link')?.textContent||item.querySelector('guid')?.textContent||'#',
+      link,
       date:item.querySelector('pubDate')?.textContent||'',
-      source:(()=>{try{return new URL(item.querySelector('link')?.textContent||'').hostname.replace('www.','');}catch(e){return 'Google News';}})()
-    }));
-    if(items.length>0){renderItems(items);return;}
-  }catch(e){}
-
-  el.innerHTML='<div class="feed-error">Flux momentanément indisponible.<br><span style="font-size:.75rem;opacity:.6">Essayez de rafraîchir ou consultez directement <a href="https://news.google.com/search?q=ZTNA+Zero+Trust" target="_blank" style="color:var(--mint)">Google News ↗</a>.</span></div>';
+      source
+    };
+  });
 }
 
 function renderItems(items){
@@ -788,9 +815,8 @@ function renderItems(items){
   el.innerHTML=items.map(item=>{
     const title=(item.title||'').replace(/ - .+$/,'').replace(/ \| .+$/,'');
     const dt=new Date(item.date);
-    const dts=isNaN(dt)?'':dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
-    const src=item.source||'Google News';
-    return `<div class="feed-item"><div class="feed-date">${dts}</div><a href="${item.link}" target="_blank" class="feed-title">${title}</a><div class="feed-source">${src}</div></div>`;
+    const dts=isNaN(dt.getTime())?'':dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
+    return`<div class="feed-item"><div class="feed-date">${dts}</div><a href="${item.link}" target="_blank" class="feed-title">${title}</a><div class="feed-source">${item.source||'Google News'}</div></div>`;
   }).join('');
   ts.textContent='MAJ · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
   feedLoaded=true;
