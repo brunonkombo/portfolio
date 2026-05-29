@@ -746,27 +746,54 @@ async function loadFeed(){
   const el=document.getElementById('ztna-feed');
   const ts=document.getElementById('feed-ts');
   el.innerHTML='<div class="feed-loading">Chargement des actualités ZTNA…</div>';
-  const rssUrl=encodeURIComponent('https://news.google.com/rss/search?q=ZTNA+Zero+Trust+Network+Access&hl=fr&gl=FR&ceid=FR:fr');
-  const api=`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}&count=6`;
+
+  // Multiple CORS proxies + RSS sources as fallbacks
+  const rssUrl='https://news.google.com/rss/search?q=ZTNA+Zero+Trust+Network+Access&hl=fr&gl=FR&ceid=FR:fr';
+  const proxies=[
+    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}&count=6`,
+    `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`
+  ];
+
+  // Try rss2json first
   try{
-    const r=await fetch(api);
+    const r=await fetch(proxies[0]);
     const d=await r.json();
     if(d.status==='ok'&&d.items&&d.items.length>0){
-      el.innerHTML=d.items.map(item=>{
-        let src='';try{src=new URL(item.link).hostname.replace('www.','');}catch(e){src=item.author||'Source';}
-        const dt=new Date(item.pubDate);
-        const dts=dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
-        const title=item.title.replace(/ - .+$/,'').replace(/ \| .+$/,'');
-        return `<div class="feed-item"><div class="feed-date">${dts}</div><a href="${item.link}" target="_blank" class="feed-title">${title}</a><div class="feed-source">${src}</div></div>`;
-      }).join('');
-      ts.textContent='MAJ · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-      feedLoaded=true;
-    }else{
-      el.innerHTML='<div class="feed-error">Flux momentanément indisponible.<br><span style="font-size:.75rem;opacity:.6">Essayez de rafraîchir ou consultez directement Google News.</span></div>';
+      renderItems(d.items.map(i=>({title:i.title,link:i.link,date:i.pubDate,source:i.author})));
+      return;
     }
-  }catch(e){
-    el.innerHTML='<div class="feed-error">Impossible de charger le flux.<br><span style="font-size:.75rem;opacity:.6">Vérifiez votre connexion internet.</span></div>';
-  }
+  }catch(e){}
+
+  // Fallback: allorigins proxy + XML parsing
+  try{
+    const r=await fetch(proxies[1]);
+    const d=await r.json();
+    const parser=new DOMParser();
+    const xml=parser.parseFromString(d.contents,'text/xml');
+    const items=[...xml.querySelectorAll('item')].slice(0,6).map(item=>({
+      title:item.querySelector('title')?.textContent||'',
+      link:item.querySelector('link')?.textContent||item.querySelector('guid')?.textContent||'#',
+      date:item.querySelector('pubDate')?.textContent||'',
+      source:(()=>{try{return new URL(item.querySelector('link')?.textContent||'').hostname.replace('www.','');}catch(e){return 'Google News';}})()
+    }));
+    if(items.length>0){renderItems(items);return;}
+  }catch(e){}
+
+  el.innerHTML='<div class="feed-error">Flux momentanément indisponible.<br><span style="font-size:.75rem;opacity:.6">Essayez de rafraîchir ou consultez directement <a href="https://news.google.com/search?q=ZTNA+Zero+Trust" target="_blank" style="color:var(--mint)">Google News ↗</a>.</span></div>';
+}
+
+function renderItems(items){
+  const el=document.getElementById('ztna-feed');
+  const ts=document.getElementById('feed-ts');
+  el.innerHTML=items.map(item=>{
+    const title=(item.title||'').replace(/ - .+$/,'').replace(/ \| .+$/,'');
+    const dt=new Date(item.date);
+    const dts=isNaN(dt)?'':dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
+    const src=item.source||'Google News';
+    return `<div class="feed-item"><div class="feed-date">${dts}</div><a href="${item.link}" target="_blank" class="feed-title">${title}</a><div class="feed-source">${src}</div></div>`;
+  }).join('');
+  ts.textContent='MAJ · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  feedLoaded=true;
 }
 </script>
 </body>
