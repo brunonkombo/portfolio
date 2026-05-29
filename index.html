@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bruno N'KOMBO · Portfolio BTS SIO SISR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Barlow+Condensed:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#040C16;--navy:#051829;--navy2:#07233C;
+  --mint:#ADEFD1;--mint2:rgba(173,239,209,.55);--mint3:rgba(173,239,209,.08);--mint4:rgba(173,239,209,.04);
+  --red:#FF4757;--red2:rgba(255,71,87,.12);
+  --amber:#FFB347;--amber2:rgba(255,179,71,.1);
+  --w:#F0F4F8;--w2:rgba(240,244,248,.6);--w3:rgba(240,244,248,.25);--w4:rgba(240,244,248,.08);
+  --bdr:rgba(173,239,209,.1);--bdr2:rgba(173,239,209,.22);
+  --sb:220px;--ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;height:100%}
+body{background:var(--bg);color:var(--w);font-family:'Barlow',sans-serif;display:flex;height:100%;overflow:hidden}
+a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+
+.sb{width:var(--sb);min-width:var(--sb);height:100vh;background:var(--navy);border-right:1px solid var(--bdr);display:flex;flex-direction:column;position:fixed;left:0;top:0;z-index:200;transition:transform .3s var(--ease)}
+.sb-logo{padding:1.75rem 1.5rem 1.5rem;border-bottom:1px solid var(--bdr)}
+.sb-logo-main{font-family:'Bebas Neue',cursive;font-size:2.1rem;color:var(--mint);letter-spacing:.06em;line-height:1}
+.sb-logo-sub{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--w3);letter-spacing:.18em;text-transform:uppercase;margin-top:.25rem}
+.sb-nav{list-style:none;flex:1;padding:.75rem .6rem;overflow-y:auto}
+.sb-nav li{margin-bottom:2px}
+.sb-nav a{display:flex;align-items:center;gap:.75rem;padding:.6rem .8rem;border-radius:3px;cursor:pointer;transition:background .15s,color .15s}
+.sb-nav a:hover,.sb-nav a.on{background:var(--mint3)}
+.sb-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--w3);min-width:18px;transition:color .15s}
+.sb-lbl{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--w3);transition:color .15s}
+.sb-nav a:hover .sb-num,.sb-nav a:hover .sb-lbl,.sb-nav a.on .sb-num,.sb-nav a.on .sb-lbl{color:var(--mint)}
+.sb-foot{padding:.9rem 1.5rem;border-top:1px solid var(--bdr)}
+.sb-status{display:flex;align-items:center;gap:.6rem;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--red);letter-spacing:.04em;line-height:1.4}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--red);min-width:7px;animation:pulseAnim 1.6s ease-in-out infinite}
+@keyframes pulseAnim{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,71,87,.4)}50%{opacity:.7;box-shadow:0 0 0 5px rgba(255,71,87,0)}}
+
+.ham{display:none;position:fixed;top:1rem;left:1rem;z-index:300;background:var(--navy);border:1px solid var(--bdr);border-radius:3px;padding:.55rem .65rem;cursor:pointer}
+.ham span{display:block;width:18px;height:1.5px;background:var(--mint);margin:3.5px 0;transition:.2s}
+.ham.open span:nth-child(1){transform:rotate(45deg) translate(3px,3.5px)}
+.ham.open span:nth-child(2){opacity:0}
+.ham.open span:nth-child(3){transform:rotate(-45deg) translate(3px,-3.5px)}
+
+.main{margin-left:var(--sb);flex:1;height:100vh;overflow:hidden;position:relative}
+.page{position:absolute;inset:0;overflow-y:auto;opacity:0;transform:translateX(32px);pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.page.on{opacity:1;transform:none;pointer-events:all}
+.page.out{opacity:0;transform:translateX(-28px)}
+.bread{position:fixed;top:.9rem;right:1.5rem;z-index:100;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--w3);letter-spacing:.15em;text-transform:uppercase;pointer-events:none}
+
+.pg{padding:3.5rem 3rem 4rem;max-width:980px}
+.pg-title{font-family:'Bebas Neue',cursive;font-size:clamp(3rem,6vw,5.5rem);color:var(--w);letter-spacing:.04em;line-height:1;margin-bottom:.3rem}
+.pg-title .acc{color:var(--mint)}
+.pg-line{display:flex;align-items:center;gap:1rem;margin-bottom:2.5rem}
+.pg-line::after{content:'';flex:1;height:1px;background:var(--bdr)}
+.pg-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--mint2);letter-spacing:.15em;text-transform:uppercase;white-space:nowrap}
+.ghostnum{position:fixed;bottom:-1.5rem;right:1rem;font-family:'Bebas Neue',cursive;font-size:22vw;color:rgba(173,239,209,.025);pointer-events:none;z-index:0;line-height:1;user-select:none}
+
+.card{background:var(--mint4);border:1px solid var(--bdr);border-radius:3px;padding:1.5rem 1.75rem;transition:border-color .2s;position:relative;z-index:1}
+.card:hover{border-color:var(--bdr2)}
+.card-tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--mint2);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.6rem}
+.card-title{font-family:'Barlow Condensed',sans-serif;font-size:1.05rem;font-weight:700;color:var(--w);margin-bottom:.6rem}
+.divider{height:1px;background:var(--bdr);margin:2.5rem 0;position:relative;z-index:1}
+.section-label{font-family:'Bebas Neue',cursive;font-size:1.6rem;color:var(--w);letter-spacing:.06em;margin-bottom:1.25rem;position:relative;z-index:1}
+.section-label .acc{color:var(--mint)}
+.tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--mint);background:rgba(173,239,209,.08);border:1px solid rgba(173,239,209,.18);border-radius:2px;padding:.18rem .55rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.5rem;border-radius:2px;font-size:.82rem;font-weight:500;cursor:pointer;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.btn-mint{background:var(--mint);color:#030C14;border:none;font-weight:600}
+.btn-mint:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(173,239,209,.2)}
+.btn-ghost{background:transparent;color:var(--mint);border:1px solid var(--bdr2)}
+.btn-ghost:hover{background:var(--mint3);transform:translateY(-2px)}
+.btn-sm{padding:.45rem 1rem;font-size:.75rem}
+
+/* HOME */
+#p-home{padding:0;overflow:hidden}
+#canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.home-inner{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;height:100%;padding:4rem 3.5rem}
+.home-eyebrow{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--mint2);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.25rem}
+.home-name{font-family:'Bebas Neue',cursive;font-size:clamp(4.5rem,9vw,8rem);line-height:.92;letter-spacing:.03em;margin-bottom:.6rem}
+.home-name .line1{color:var(--w);display:block}
+.home-name .line2{color:var(--mint);display:block}
+.home-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(1rem,2vw,1.35rem);font-weight:400;color:var(--w2);letter-spacing:.04em;margin-bottom:1.75rem}
+.home-badges{display:flex;flex-wrap:wrap;gap:.65rem;margin-bottom:2.5rem}
+.badge{display:inline-flex;align-items:center;gap:.45rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.08em;padding:.4rem .85rem;border-radius:2px}
+.badge-red{background:var(--red2);border:1px solid rgba(255,71,87,.3);color:var(--red)}
+.badge-mint{background:var(--mint3);border:1px solid var(--bdr2);color:var(--mint)}
+.badge-mute{background:var(--w4);border:1px solid rgba(240,244,248,.12);color:var(--w2)}
+.pulse-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulseAnim 1.6s ease-in-out infinite}
+.home-cta{display:flex;gap:1rem;flex-wrap:wrap}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:3rem;position:relative;z-index:1}
+.about-text p{font-size:.93rem;color:var(--w2);line-height:1.85;margin-bottom:1.1rem}
+.about-text p:last-child{margin-bottom:0}
+.about-text strong{color:var(--mint);font-weight:500}
+.info-stack{display:flex;flex-direction:column;gap:.75rem}
+.info-row{border:1px solid var(--bdr);border-radius:3px;padding:1rem 1.2rem;background:var(--mint4)}
+.info-key{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--mint2);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.25rem}
+.info-val{font-size:.9rem;color:var(--w);font-weight:500}
+.qualities-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;position:relative;z-index:1}
+.quality{border:1px solid var(--bdr);border-radius:3px;padding:1.25rem;background:var(--mint4);transition:border-color .2s,transform .2s}
+.quality:hover{border-color:var(--bdr2);transform:translateY(-3px)}
+.quality-n{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--mint2);margin-bottom:.5rem}
+.quality-t{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.95rem;color:var(--w);margin-bottom:.4rem}
+.quality-d{font-size:.8rem;color:var(--w2);line-height:1.7}
+.exp-card{border:1px solid var(--bdr);border-left:2px solid var(--mint);border-radius:0 3px 3px 0;padding:1.5rem 2rem;background:var(--mint4);position:relative;z-index:1}
+.exp-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem}
+.exp-org{font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;color:var(--mint)}
+.exp-period{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--w3)}
+.exp-role{font-size:.87rem;color:var(--w2);margin-bottom:.75rem;font-style:italic}
+.exp-list{list-style:none}
+.exp-list li{font-size:.83rem;color:var(--w2);padding:.25rem 0 .25rem 1.2rem;position:relative;border-bottom:1px solid var(--bdr)}
+.exp-list li:last-child{border-bottom:none}
+.exp-list li::before{content:'›';position:absolute;left:0;color:var(--mint);font-size:.8rem}
+
+/* BTS SIO */
+.bts-intro{font-size:.95rem;color:var(--w2);line-height:1.85;margin-bottom:2.5rem;border-left:2px solid var(--mint);padding-left:1.5rem;position:relative;z-index:1}
+.bts-intro strong{color:var(--mint);font-weight:500}
+.bts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;position:relative;z-index:1}
+.bts-card{border:1px solid var(--bdr);border-radius:3px;padding:1.75rem;background:var(--mint4)}
+.bts-card.active-option{border-color:var(--mint2);background:rgba(173,239,209,.06)}
+.bts-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .65rem;border-radius:2px;margin-bottom:.85rem}
+.bts-badge.active{background:rgba(173,239,209,.15);border:1px solid var(--bdr2);color:var(--mint)}
+.bts-badge.inactive{background:var(--w4);border:1px solid rgba(240,244,248,.12);color:var(--w3)}
+.bts-card-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.2rem;color:var(--w);margin-bottom:.5rem}
+.bts-card-sub{font-size:.8rem;color:var(--w2);margin-bottom:1rem;line-height:1.6;font-style:italic}
+.bts-list{list-style:none}
+.bts-list li{font-size:.82rem;color:var(--w2);padding:.3rem 0 .3rem 1.2rem;position:relative;border-bottom:1px solid var(--bdr)}
+.bts-list li:last-child{border-bottom:none}
+.bts-list li::before{content:'→';position:absolute;left:0;color:var(--mint);font-size:.7rem;top:.35rem}
+.bts-timeline{display:flex;gap:2px;margin-top:2.5rem;position:relative;z-index:1}
+.tl-item{flex:1;padding:1rem 1.2rem;border:1px solid var(--bdr);border-radius:3px;background:var(--mint4)}
+.tl-year{font-family:'Bebas Neue',cursive;font-size:1.5rem;color:var(--mint);margin-bottom:.2rem}
+.tl-desc{font-size:.78rem;color:var(--w2)}
+
+/* VEILLE TECHNO */
+.veille-def{display:grid;grid-template-columns:1.1fr 1fr;gap:2rem;position:relative;z-index:1;margin-bottom:2.5rem}
+.veille-def-text{font-size:.9rem;color:var(--w2);line-height:1.85}
+.veille-def-text p{margin-bottom:.9rem}
+.veille-def-text p:last-child{margin-bottom:0}
+.veille-def-text strong{color:var(--mint);font-weight:500}
+.terminal-box{background:rgba(4,12,22,.8);border:1px solid var(--bdr2);border-radius:3px;padding:1.25rem 1.5rem;font-family:'JetBrains Mono',monospace}
+.terminal-top{display:flex;align-items:center;gap:.4rem;margin-bottom:.9rem;padding-bottom:.6rem;border-bottom:1px solid var(--bdr)}
+.terminal-dot{width:8px;height:8px;border-radius:50%}
+.terminal-title{font-size:.6rem;color:var(--w3);letter-spacing:.12em;text-transform:uppercase;margin-left:.25rem}
+.terminal-line{font-size:.72rem;color:var(--w2);margin-bottom:.3rem;display:flex;gap:.75rem}
+.terminal-line .prompt{color:var(--mint2)}
+.terminal-line .val{color:var(--w)}
+.ztna-def-block{background:rgba(173,239,209,.04);border:1px solid var(--bdr);border-left:3px solid var(--mint);border-radius:0 3px 3px 0;padding:1.75rem 2rem;margin-bottom:2.5rem;position:relative;z-index:1}
+.ztna-def-block p{font-size:.92rem;color:var(--w2);line-height:1.85;margin-bottom:.75rem}
+.ztna-def-block p:last-child{margin-bottom:0}
+.ztna-def-block strong{color:var(--mint);font-weight:500}
+.ztna-def-block em{color:var(--w);font-style:normal;font-weight:500}
+.concepts-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+.concept-badge{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--mint);background:var(--mint3);border:1px solid rgba(173,239,209,.2);border-radius:2px;padding:.3rem .75rem}
+.types-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;position:relative;z-index:1;margin-bottom:2.5rem}
+.type-card{border:1px solid var(--bdr);border-radius:3px;padding:1.5rem;background:var(--mint4);transition:border-color .2s,transform .2s}
+.type-card:hover{border-color:var(--bdr2);transform:translateY(-3px)}
+.type-num{font-family:'Bebas Neue',cursive;font-size:2rem;color:rgba(173,239,209,.2);line-height:1;margin-bottom:.5rem}
+.type-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;color:var(--mint);margin-bottom:.6rem;line-height:1.2}
+.type-desc{font-size:.8rem;color:var(--w2);line-height:1.7;margin-bottom:.85rem}
+.type-pros{list-style:none}
+.type-pros li{font-size:.76rem;color:var(--w3);padding:.2rem 0 .2rem 1rem;position:relative}
+.type-pros li::before{content:'✓';position:absolute;left:0;color:var(--mint2);font-size:.7rem}
+.os-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;position:relative;z-index:1;margin-bottom:2.5rem}
+.os-card{border:1px solid var(--bdr);border-radius:3px;padding:1.25rem 1.5rem;background:var(--mint4);transition:border-color .2s,transform .2s}
+.os-card:hover{border-color:var(--bdr2);transform:translateY(-3px)}
+.os-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;color:var(--w);margin-bottom:.3rem}
+.os-repo{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--mint2);margin-bottom:.6rem}
+.os-desc{font-size:.8rem;color:var(--w2);line-height:1.65;margin-bottom:.75rem}
+.os-tags{display:flex;flex-wrap:wrap;gap:.3rem}
+.live-feed-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;position:relative;z-index:1}
+.live-badge{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--red);background:var(--red2);border:1px solid rgba(255,71,87,.25);border-radius:2px;padding:.3rem .65rem}
+.feed-container{background:rgba(4,12,22,.6);border:1px solid var(--bdr);border-radius:3px;min-height:180px;position:relative;z-index:1}
+.feed-item{padding:1rem 1.25rem;border-bottom:1px solid var(--bdr);transition:background .15s}
+.feed-item:last-child{border-bottom:none}
+.feed-item:hover{background:var(--mint4)}
+.feed-date{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--w3);margin-bottom:.3rem}
+.feed-title{font-size:.85rem;color:var(--w);line-height:1.4;display:block;margin-bottom:.25rem;transition:color .15s}
+.feed-item:hover .feed-title{color:var(--mint)}
+.feed-source{font-size:.72rem;color:var(--mint2)}
+.feed-loading{padding:2rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--w3);letter-spacing:.1em}
+.feed-error{padding:1.5rem;text-align:center;font-size:.82rem;color:var(--w3)}
+.feed-top{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.25rem;border-bottom:1px solid var(--bdr)}
+.feed-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--mint2);letter-spacing:.12em;text-transform:uppercase}
+
+/* CERTIFICATIONS */
+.cert-group{margin-bottom:2.5rem;position:relative;z-index:1}
+.cert-issuer{font-family:'Bebas Neue',cursive;font-size:1.8rem;color:var(--w);letter-spacing:.06em;margin-bottom:1rem;display:flex;align-items:center;gap:1rem}
+.cert-issuer::after{content:'';flex:1;height:1px;background:var(--bdr)}
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.9rem}
+.cert-card{border:1px solid var(--bdr);border-radius:3px;padding:1.25rem 1.4rem;background:var(--mint4);transition:border-color .2s,transform .2s}
+.cert-card:hover{border-color:var(--bdr2);transform:translateY(-3px)}
+.cert-org{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--mint2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.cert-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.92rem;color:var(--w);margin-bottom:.3rem;line-height:1.3}
+.cert-date{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--w3);margin-bottom:.75rem}
+.cert-link{display:inline-flex;align-items:center;gap:.35rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--mint);border:1px solid rgba(173,239,209,.2);border-radius:2px;padding:.3rem .65rem;transition:background .15s}
+.cert-link:hover{background:var(--mint3)}
+.cert-link::after{content:'↗';font-size:.55rem}
+.cert-nolink{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--w3);padding:.3rem 0;display:block}
+
+/* E5 LABS */
+.lab-list{display:flex;flex-direction:column;gap:1.25rem;position:relative;z-index:1}
+.lab-item{border:1px solid var(--bdr);border-radius:3px;background:var(--mint4);overflow:hidden;transition:border-color .2s}
+.lab-item:hover{border-color:var(--bdr2)}
+.lab-header{display:flex;align-items:flex-start;gap:1.5rem;padding:1.5rem 1.75rem 1.25rem;border-bottom:1px solid var(--bdr)}
+.lab-num{font-family:'Bebas Neue',cursive;font-size:2.5rem;color:rgba(173,239,209,.2);line-height:1;min-width:3rem}
+.lab-title{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;color:var(--w);margin-bottom:.4rem}
+.lab-stack{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.35rem}
+.lab-body{padding:1rem 1.75rem 1.5rem}
+.lab-points{list-style:none}
+.lab-points li{font-size:.84rem;color:var(--w2);padding:.3rem 0 .3rem 1.3rem;position:relative;border-bottom:1px solid var(--bdr)}
+.lab-points li:last-child{border-bottom:none}
+.lab-points li::before{content:'✓';position:absolute;left:0;color:var(--mint);font-size:.72rem;top:.35rem}
+
+/* E6 */
+.e6-hero{border:1px solid var(--bdr);border-left:3px solid var(--mint);border-radius:0 3px 3px 0;padding:2rem 2.5rem;background:var(--mint4);margin-bottom:1.5rem;position:relative;z-index:1}
+.e6-ref{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--mint2);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.6rem}
+.e6-proj-title{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:700;color:var(--w);margin-bottom:.5rem;line-height:1.25}
+.e6-context{font-size:.85rem;color:var(--w2);font-style:italic;margin-bottom:1rem}
+.e6-stack{display:flex;flex-wrap:wrap;gap:.4rem}
+.e6-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:1.25rem;position:relative;z-index:1;margin-bottom:1.25rem}
+.e6-desc{font-size:.88rem;color:var(--w2);line-height:1.85}
+.e6-desc strong{color:var(--mint);font-weight:500}
+.e6-skills{list-style:none}
+.e6-skills li{font-size:.83rem;color:var(--w2);padding:.3rem 0 .3rem 1.2rem;position:relative;border-bottom:1px solid var(--bdr)}
+.e6-skills li:last-child{border-bottom:none}
+.e6-skills li::before{content:'›';position:absolute;left:0;color:var(--mint)}
+.e6-doc{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;border:1px solid var(--bdr2);border-radius:3px;padding:1.25rem 1.5rem;background:rgba(173,239,209,.05);position:relative;z-index:1}
+.e6-doc-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--mint2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.3rem}
+.e6-doc-name{font-size:.9rem;color:var(--w);font-weight:500}
+.e6-doc-link{display:inline-flex;align-items:center;gap:.5rem;background:var(--mint);color:#030C14;border-radius:2px;padding:.65rem 1.4rem;font-size:.82rem;font-weight:600;transition:box-shadow .2s,transform .2s}
+.e6-doc-link:hover{box-shadow:0 6px 20px rgba(173,239,209,.2);transform:translateY(-1px)}
+.e6-schema{border:1px dashed var(--bdr2);border-radius:3px;padding:2rem;text-align:center;position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--w3)}
+
+/* BACKSTAGE */
+.backstage-quote{border-left:3px solid var(--mint);padding:1.5rem 2rem;margin-bottom:2.5rem;position:relative;z-index:1}
+.backstage-quote p{font-family:'Barlow',sans-serif;font-size:1rem;font-style:italic;color:var(--w2);line-height:1.8}
+.backstage-quote cite{display:block;font-size:.75rem;color:var(--mint2);font-family:'JetBrains Mono',monospace;margin-top:.75rem;letter-spacing:.08em}
+.wip-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;position:relative;z-index:1}
+.wip-card{border:1px dashed var(--bdr);border-radius:3px;padding:1.5rem;text-align:center;background:var(--mint4)}
+.wip-icon{font-size:1.5rem;margin-bottom:.6rem}
+.wip-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.9rem;color:var(--w2);margin-bottom:.3rem}
+.wip-tag-wrap{display:flex;justify-content:center;flex-wrap:wrap;gap:.3rem;margin-top:.5rem}
+
+@media(max-width:768px){
+  .sb{transform:translateX(-100%)}
+  .sb.open{transform:none}
+  .ham{display:block}
+  .main{margin-left:0}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150}
+  .overlay.show{display:block}
+  .pg{padding:4rem 1.2rem 3rem}
+  .about-grid,.bts-grid,.e6-grid,.veille-def,.types-grid{grid-template-columns:1fr}
+  .qualities-grid,.wip-grid{grid-template-columns:1fr 1fr}
+  .pg-title{font-size:2.5rem}
+}
+@media(max-width:480px){
+  .qualities-grid,.cert-grid,.wip-grid,.os-grid{grid-template-columns:1fr}
+  .home-name{font-size:3.5rem}
+  .types-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<button class="ham" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
+<div class="overlay" id="overlay"></div>
+
+<nav class="sb" id="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-main">N'KOMBO</div>
+    <div class="sb-logo-sub">Portfolio · BTS SIO SISR · 2025–2027</div>
+  </div>
+  <ul class="sb-nav">
+    <li><a class="on" data-page="p-home"><span class="sb-num">01</span><span class="sb-lbl">Accueil</span></a></li>
+    <li><a data-page="p-about"><span class="sb-num">02</span><span class="sb-lbl">Présentation</span></a></li>
+    <li><a data-page="p-bts"><span class="sb-num">03</span><span class="sb-lbl">BTS SIO</span></a></li>
+    <li><a data-page="p-veille"><span class="sb-num">04</span><span class="sb-lbl">Veille Techno</span></a></li>
+    <li><a data-page="p-certs"><span class="sb-num">05</span><span class="sb-lbl">Certifications</span></a></li>
+    <li><a data-page="p-e5"><span class="sb-num">06</span><span class="sb-lbl">Épreuve E5</span></a></li>
+    <li><a data-page="p-e6"><span class="sb-num">07</span><span class="sb-lbl">Épreuve E6</span></a></li>
+    <li><a data-page="p-labs"><span class="sb-num">08</span><span class="sb-lbl">Backstage</span></a></li>
+  </ul>
+  <div class="sb-foot">
+    <div class="sb-status"><span class="pulse"></span><span>EN RECHERCHE<br>D'ALTERNANCE</span></div>
+  </div>
+</nav>
+
+<main class="main">
+<div class="bread" id="bread">PORTFOLIO · ACCUEIL</div>
+
+<!-- 01 ACCUEIL -->
+<div class="page on" id="p-home">
+  <canvas id="canvas"></canvas>
+  <div class="home-inner">
+    <p class="home-eyebrow">BTS SIO · Option SISR · CFA INSTA · Paris</p>
+    <h1 class="home-name"><span class="line1">BRUNO</span><span class="line2">N'KOMBO</span></h1>
+    <p class="home-title">Technicien Support &amp; Infrastructure IT</p>
+    <div class="home-badges">
+      <span class="badge badge-red"><span class="pulse-dot"></span> EN RECHERCHE D'ALTERNANCE · DISPONIBLE IMMÉDIATEMENT</span>
+      <span class="badge badge-mint">BTS SIO SISR · 3j entreprise / 2j école</span>
+      <span class="badge badge-mute">Argenteuil (95100)</span>
+      <a href="CV_Bruno_Nkombo.pdf" download class="badge badge-mint" style="cursor:pointer">⬇ Télécharger mon CV</a>
+    </div>
+    <div class="home-cta">
+      <a class="btn btn-mint" data-page="p-e6">Mes projets</a>
+      <a class="btn btn-ghost" data-page="p-veille">Veille ZTNA</a>
+      <a class="btn btn-ghost" href="mailto:brunonbe28@gmail.com">Me contacter</a>
+      <a class="btn btn-mint" href="CV_Bruno_Nkombo.pdf" download>⬇ Mon CV</a>
+    </div>
+  </div>
+  <div class="ghostnum">01</div>
+</div>
+
+<!-- 02 PRÉSENTATION -->
+<div class="page" id="p-about">
+  <div class="pg">
+    <h1 class="pg-title">PRÉ<span class="acc">SENTATION</span></h1>
+    <div class="pg-line"><span class="pg-tag">// À propos de moi</span></div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p><strong>Bonjour</strong>, je m'appelle <strong>Bruno N'KOMBO</strong>, j'ai 20 ans et je suis étudiant en 1ère année de <strong>BTS SIO option SISR</strong> au CFA INSTA (Paris).</p>
+        <p>Profil <strong>terrain et opérationnel</strong>, je conçois et documente des infrastructures réelles : Active Directory, pfSense, VLAN Cisco, virtualisation Proxmox/VMware, stack LAMP. J'ai acquis une première expérience de gestion de parc informatique et de support utilisateur en environnement associatif.</p>
+        <p>Passionné par la <strong>cybersécurité</strong> et les réseaux, je mène en parallèle une <strong>veille technologique</strong> active sur les architectures Zero Trust (ZTNA), l'IA appliquée aux firewalls et la virtualisation avancée.</p>
+        <p>Je recherche activement un <strong>contrat d'alternance</strong> en support informatique et administration systèmes &amp; réseaux — rythme 3j entreprise / 2j école.</p>
+      </div>
+      <div class="info-stack">
+        <div class="info-row"><div class="info-key">Formation</div><div class="info-val">BTS SIO option SISR</div></div>
+        <div class="info-row"><div class="info-key">Établissement</div><div class="info-val">CFA INSTA — Paris</div></div>
+        <div class="info-row"><div class="info-key">Rythme souhaité</div><div class="info-val">3j entreprise / 2j école</div></div>
+        <div class="info-row"><div class="info-key">Localisation</div><div class="info-val">Argenteuil (95100)</div></div>
+        <div class="info-row"><div class="info-key">LinkedIn</div><div class="info-val"><a href="https://www.linkedin.com/in/bruno-nkombo" target="_blank" style="color:var(--mint)">in/bruno-nkombo ↗</a></div></div>
+        <div class="info-row"><div class="info-key">Langues</div><div class="info-val">Français (natif) · Anglais B2</div></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-label">MES <span class="acc">QUALITÉS</span></div>
+    <div class="qualities-grid">
+      <div class="quality"><div class="quality-n">01 ·</div><div class="quality-t">Autonomie terrain</div><div class="quality-d">Conception et déploiement d'infrastructure de bout en bout, de la configuration au test, sans supervision constante.</div></div>
+      <div class="quality"><div class="quality-n">02 ·</div><div class="quality-t">Rigueur documentaire</div><div class="quality-d">Chaque infrastructure est documentée, schématisée (draw.io) et rédigée pour garantir la reproductibilité.</div></div>
+      <div class="quality"><div class="quality-n">03 ·</div><div class="quality-t">Résolution de problèmes</div><div class="quality-d">Analyse méthodique, diagnostic et résolution des incidents — l'ingénierie c'est savoir pourquoi ça n'a pas marché.</div></div>
+      <div class="quality"><div class="quality-n">04 ·</div><div class="quality-t">Adaptabilité</div><div class="quality-d">À l'aise avec de nouveaux environnements, OS ou technologies. Apprentissage rapide par la pratique.</div></div>
+      <div class="quality"><div class="quality-n">05 ·</div><div class="quality-t">Esprit d'équipe</div><div class="quality-d">Expérience de travail collaboratif en environnement associatif, partage et communication naturels.</div></div>
+      <div class="quality"><div class="quality-n">06 ·</div><div class="quality-t">Curiosité technique</div><div class="quality-d">Veille constante sur les réseaux, IA et cybersécurité — 8 certifications obtenues en autodidacte.</div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-label">EXPÉ<span class="acc">RIENCE</span></div>
+    <div class="exp-card">
+      <div class="exp-header">
+        <div><div class="exp-org">ONG Elite WomanClub — Brazzaville, Congo</div><div class="exp-role">Chargé de Gestion Informatique &amp; Communication numérique</div></div>
+        <div class="exp-period">2024 – 2025</div>
+      </div>
+      <ul class="exp-list">
+        <li>Gestion et maintenance du parc informatique (postes, périphériques, comptes utilisateurs)</li>
+        <li>Support utilisateur N1 : diagnostic, résolution d'incidents bureautiques, configuration de postes</li>
+        <li>Mise en place de procédures numériques pour fluidifier le travail collaboratif (droits d'accès, sauvegardes)</li>
+        <li>Production de documents et supports de communication (MS Office, Photoshop, Canva)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="ghostnum">02</div>
+</div>
+
+<!-- 03 BTS SIO -->
+<div class="page" id="p-bts">
+  <div class="pg">
+    <h1 class="pg-title">BTS <span class="acc">SIO</span></h1>
+    <div class="pg-line"><span class="pg-tag">// Qu'est-ce que le BTS SIO ?</span></div>
+    <p class="bts-intro">Le <strong>Brevet de Technicien Supérieur en Services Informatiques aux Organisations (BTS SIO)</strong> est un diplôme de deux ans après le baccalauréat offrant une formation pratique en informatique. Il enseigne des compétences essentielles en <strong>support informatique</strong>, <strong>services informatiques</strong> et <strong>cybersécurité</strong>. Au terme du premier semestre, il propose deux options permettant d'acquérir des compétences supplémentaires selon la spécialisation choisie.</p>
+    <div class="bts-grid">
+      <div class="bts-card active-option">
+        <div class="bts-badge active">✓ Mon option</div>
+        <div class="bts-card-title">Option SISR</div>
+        <div class="bts-card-sub">Solutions d'Infrastructure, Systèmes et Réseaux</div>
+        <ul class="bts-list">
+          <li>Administration des systèmes et réseaux</li>
+          <li>Conception et déploiement d'infrastructures</li>
+          <li>Cybersécurité : protection des données et équipements</li>
+          <li>Support informatique et transformation numérique</li>
+          <li>Supervision, tests et maintenance réseau</li>
+        </ul>
+      </div>
+      <div class="bts-card">
+        <div class="bts-badge inactive">Autre option</div>
+        <div class="bts-card-title">Option SLAM</div>
+        <div class="bts-card-sub">Solutions Logicielles et Applications Métier</div>
+        <ul class="bts-list">
+          <li>Conception et développement d'applications</li>
+          <li>Gestion de bases de données</li>
+          <li>Déploiement et maintenance applicative</li>
+          <li>Cybersécurité des solutions logicielles</li>
+          <li>Gestion de version et intégration continue</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bts-timeline">
+      <div class="tl-item"><div class="tl-year">2024</div><div class="tl-desc">Baccalauréat — Brazzaville, Congo</div></div>
+      <div class="tl-item"><div class="tl-year">2025</div><div class="tl-desc">Entrée en BTS SIO SISR — CFA INSTA, Paris</div></div>
+      <div class="tl-item"><div class="tl-year">2026</div><div class="tl-desc">1ère année en cours · E5 &amp; E6 · Labs terrain</div></div>
+      <div class="tl-item"><div class="tl-year">2027</div><div class="tl-desc">Obtention du BTS SIO SISR · Objectif : Licence</div></div>
+    </div>
+  </div>
+  <div class="ghostnum">03</div>
+</div>
+
+<!-- 04 VEILLE TECHNOLOGIQUE -->
+<div class="page" id="p-veille">
+  <div class="pg">
+    <h1 class="pg-title">VEILLE <span class="acc">TECHNO</span></h1>
+    <div class="pg-line"><span class="pg-tag">// ZTNA · Zero Trust Network Access</span></div>
+
+    <!-- Définition veille -->
+    <div class="section-label">QU'EST-CE QU'UNE <span class="acc">VEILLE TECHNOLOGIQUE ?</span></div>
+    <div class="veille-def">
+      <div class="veille-def-text">
+        <p>La <strong>veille technologique</strong> est un processus continu et systématique de surveillance, de collecte et d'analyse des innovations, tendances et évolutions technologiques dans un domaine précis. Elle permet d'<strong>anticiper les changements</strong>, d'identifier les opportunités et de rester informé des dernières avancées avant qu'elles ne deviennent incontournables.</p>
+        <p>Dans le domaine de la <strong>cybersécurité réseau</strong>, cette veille est essentielle : les menaces évoluent en permanence, les architectures se transforment (cloud, Zero Trust, SD-WAN), et de nouvelles solutions open-source émergent chaque mois. Être informé, c'est être en mesure de proposer des solutions adaptées et à jour.</p>
+        <p>Ma veille porte spécifiquement sur les <strong>architectures ZTNA</strong>, les <strong>firewalls nouvelle génération</strong> et l'<strong>intégration de l'IA dans la sécurité réseau</strong>.</p>
+      </div>
+      <div class="terminal-box">
+        <div class="terminal-top">
+          <div class="terminal-dot" style="background:#ff5f57"></div>
+          <div class="terminal-dot" style="background:#ffbd2e"></div>
+          <div class="terminal-dot" style="background:#28c940"></div>
+          <span class="terminal-title">Google Alerts — Mots-clés surveillés</span>
+        </div>
+        <div class="terminal-line"><span class="prompt">$</span><span class="val">"ZTNA" OR "Zero Trust Network Access"</span></div>
+        <div class="terminal-line"><span class="prompt">$</span><span class="val">"Zero Trust Security" 2025 2026</span></div>
+        <div class="terminal-line"><span class="prompt">$</span><span class="val">"Network Access Control" open source</span></div>
+        <div class="terminal-line"><span class="prompt">$</span><span class="val">"pfSense" OR "OpenZiti" OR "Netbird"</span></div>
+        <div class="terminal-line"><span class="prompt">$</span><span class="val">"AI firewall" OR "IA sécurité réseau"</span></div>
+        <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--bdr)">
+          <div class="terminal-line"><span class="prompt" style="color:var(--w3)">freq</span><span class="val" style="color:var(--w2)">Au fil de l'eau (temps réel)</span></div>
+          <div class="terminal-line"><span class="prompt" style="color:var(--w3)">src</span><span class="val" style="color:var(--w2)">Actualités · Web · Blogs tech</span></div>
+          <div class="terminal-line"><span class="prompt" style="color:var(--w3)">lang</span><span class="val" style="color:var(--w2)">Français + Anglais</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Définition ZTNA -->
+    <div class="section-label">ZTNA — <span class="acc">DÉFINITION</span></div>
+    <div class="ztna-def-block">
+      <p>Le <em>ZTNA (Zero Trust Network Access)</em> est un modèle de sécurité réseau fondé sur le principe <strong>« Ne jamais faire confiance, toujours vérifier »</strong> (Never Trust, Always Verify). Contrairement aux VPN traditionnels qui accordent un accès large au réseau dès l'authentification réalisée, le ZTNA applique des <strong>contrôles d'accès granulaires</strong> basés sur l'identité de l'utilisateur, le contexte de la connexion et la posture de l'appareil.</p>
+      <p>Chaque requête d'accès est évaluée <strong>individuellement et en continu</strong>, quelle que soit la localisation de l'utilisateur (bureau, télétravail, mobilité) ou de la ressource (on-premise, cloud, SaaS). L'accès est accordé uniquement aux ressources strictement nécessaires selon le <strong>principe du moindre privilège</strong>.</p>
+      <div class="concepts-row">
+        <span class="concept-badge">Never Trust, Always Verify</span>
+        <span class="concept-badge">Microsegmentation</span>
+        <span class="concept-badge">Authentification MFA</span>
+        <span class="concept-badge">Posture de l'endpoint</span>
+        <span class="concept-badge">Moindre privilège</span>
+        <span class="concept-badge">Accès conditionnel</span>
+        <span class="concept-badge">Contrôle continu</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Types ZTNA -->
+    <div class="section-label">LES DIFFÉRENTS <span class="acc">TYPES DE ZTNA</span></div>
+    <div class="types-grid">
+      <div class="type-card">
+        <div class="type-num">01</div>
+        <div class="type-name">ZTNA Initié par l'agent (Client-initiated)</div>
+        <div class="type-desc">Un logiciel agent est installé sur l'appareil de l'utilisateur. Il s'authentifie auprès d'un broker ZTNA et établit un tunnel chiffré vers les ressources autorisées.</div>
+        <ul class="type-pros">
+          <li>Contrôle fin de la posture de l'endpoint</li>
+          <li>Vérification antivirus, OS, MDM</li>
+          <li>Adapté aux équipements gérés (entreprise)</li>
+        </ul>
+      </div>
+      <div class="type-card">
+        <div class="type-num">02</div>
+        <div class="type-name">ZTNA Initié par le service (Service-initiated)</div>
+        <div class="type-desc">Aucun agent client requis. Un connecteur léger installé côté ressource établit une connexion sortante (outbound-only) vers un cloud broker qui relaie les accès autorisés.</div>
+        <ul class="type-pros">
+          <li>Fonctionne sans agent sur le client</li>
+          <li>Adapté aux BYOD et partenaires externes</li>
+          <li>Ressources jamais exposées directement</li>
+        </ul>
+      </div>
+      <div class="type-card">
+        <div class="type-num">03</div>
+        <div class="type-name">ZTNA Cloud-Native (as a Service)</div>
+        <div class="type-desc">L'intégralité de l'infrastructure ZTNA est hébergée et gérée dans le cloud par le fournisseur. L'entreprise n'administre aucune infrastructure on-premise dédiée.</div>
+        <ul class="type-pros">
+          <li>Scalabilité automatique</li>
+          <li>Maintenance minimale pour l'entreprise</li>
+          <li>Idéal pour architectures SaaS / multi-cloud</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Solutions open-source -->
+    <div class="section-label">SOLUTIONS <span class="acc">OPEN-SOURCE</span></div>
+    <div class="os-grid">
+      <div class="os-card">
+        <div class="os-name">OpenZiti ⭐</div>
+        <div class="os-repo">github · openziti/ziti</div>
+        <div class="os-desc">Réseau overlay zero trust complet, auto-hébergeable. SDKs disponibles (Go, Python, JS). Intégrable directement dans les applications.</div>
+        <div class="os-tags"><span class="tag">Overlay réseau</span><span class="tag">Multi-SDK</span><span class="tag">On-premise</span></div>
+      </div>
+      <div class="os-card">
+        <div class="os-name">Netbird</div>
+        <div class="os-repo">github · netbirdio/netbird</div>
+        <div class="os-desc">Réseau mesh peer-to-peer basé sur WireGuard avec contrôle centralisé. Interface web intuitive. Supporte l'auto-hébergement du control plane.</div>
+        <div class="os-tags"><span class="tag">WireGuard</span><span class="tag">P2P mesh</span><span class="tag">Auto-hébergé</span></div>
+      </div>
+      <div class="os-card">
+        <div class="os-name">Headscale</div>
+        <div class="os-repo">github · juanfont/headscale</div>
+        <div class="os-desc">Implémentation open-source du serveur de contrôle Tailscale. WireGuard sous le capot. Auto-hébergement complet du control plane Tailscale.</div>
+        <div class="os-tags"><span class="tag">WireGuard</span><span class="tag">Tailscale</span><span class="tag">Control plane</span></div>
+      </div>
+      <div class="os-card">
+        <div class="os-name">Teleport</div>
+        <div class="os-repo">github · gravitational/teleport</div>
+        <div class="os-desc">Accès unifié SSH, Kubernetes, bases de données et applications web. Certificats éphémères, audit complet des sessions, sans VPN.</div>
+        <div class="os-tags"><span class="tag">SSH</span><span class="tag">Kubernetes</span><span class="tag">Certificats</span></div>
+      </div>
+      <div class="os-card">
+        <div class="os-name">Pritunl</div>
+        <div class="os-repo">github · pritunl/pritunl</div>
+        <div class="os-desc">Serveur VPN/ZTNA avec interface admin web élégante. Support OpenVPN et WireGuard. Version communautaire gratuite et auto-hébergeable.</div>
+        <div class="os-tags"><span class="tag">OpenVPN</span><span class="tag">WireGuard</span><span class="tag">Web admin</span></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Flux d'actualités live -->
+    <div class="live-feed-header">
+      <div class="section-label" style="margin-bottom:0">ACTUALITÉS <span class="acc">EN DIRECT</span></div>
+      <div class="live-badge"><span class="pulse-dot"></span> LIVE</div>
+      <button onclick="loadFeed()" class="btn btn-ghost btn-sm" style="margin-left:auto">↻ Actualiser</button>
+    </div>
+    <div class="feed-container">
+      <div class="feed-top">
+        <span class="feed-label">Source · Google News — ZTNA / Zero Trust</span>
+        <span class="feed-label" id="feed-ts"></span>
+      </div>
+      <div id="ztna-feed"><div class="feed-loading">Chargement des actualités…</div></div>
+    </div>
+
+  </div>
+  <div class="ghostnum">04</div>
+</div>
+
+<!-- 05 CERTIFICATIONS -->
+<div class="page" id="p-certs">
+  <div class="pg">
+    <h1 class="pg-title">CERTIFI<span class="acc">CATIONS</span></h1>
+    <div class="pg-line"><span class="pg-tag">// 8 certifications obtenues · Cisco · ANSSI · Anthropic</span></div>
+    <div class="cert-group">
+      <div class="cert-issuer">CISCO / CREDLY</div>
+      <div class="cert-grid">
+        <div class="cert-card"><div class="cert-org">Cisco · Credly</div><div class="cert-name">Introduction to Cybersecurity</div><div class="cert-date">Décembre 2025</div><a href="https://www.credly.com/badges/f04bcb7b-49ec-4f3e-9e32-d081387b4482/public_url" target="_blank" class="cert-link">Voir le badge</a></div>
+        <div class="cert-card"><div class="cert-org">Cisco · Credly</div><div class="cert-name">Networking Basics</div><div class="cert-date">Décembre 2025</div><a href="https://www.credly.com/badges/dd01699a-a0b7-4c59-893a-77b176677302/public_url" target="_blank" class="cert-link">Voir le badge</a></div>
+      </div>
+    </div>
+    <div class="cert-group">
+      <div class="cert-issuer">ANSSI / MOOC</div>
+      <div class="cert-grid">
+        <div class="cert-card"><div class="cert-org">ANSSI — SecNumacadémie</div><div class="cert-name">MOOC Cybersécurité</div><div class="cert-date">Décembre 2025</div><a href="https://secnumacademie.gouv.fr/" target="_blank" class="cert-link">SecNumacadémie</a></div>
+      </div>
+    </div>
+    <div class="cert-group">
+      <div class="cert-issuer">ANTHROPIC · 6 CERTIFICATIONS</div>
+      <div class="cert-grid">
+        <div class="cert-card"><div class="cert-org">Anthropic</div><div class="cert-name">Claude 101</div><div class="cert-date">Mai 2026</div><span class="cert-nolink">Prise en main de Claude</span></div>
+        <div class="cert-card"><div class="cert-org">Anthropic</div><div class="cert-name">Claude Code 101</div><div class="cert-date">Mai 2026</div><span class="cert-nolink">Claude pour le développement</span></div>
+        <div class="cert-card"><div class="cert-org">Anthropic</div><div class="cert-name">Claude Cowork</div><div class="cert-date">Mai 2026</div><span class="cert-nolink">Automatisation de tâches desktop</span></div>
+        <div class="cert-card"><div class="cert-org">Anthropic</div><div class="cert-name">AI Fluency for Students</div><div class="cert-date">Mai 2026</div><span class="cert-nolink">Compétences IA pour étudiants</span></div>
+        <div class="cert-card"><div class="cert-org">Anthropic</div><div class="cert-name">AI Fluency for Small Businesses</div><div class="cert-date">Mai 2026</div><span class="cert-nolink">IA appliquée aux TPE/PME</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="ghostnum">05</div>
+</div>
+
+<!-- 06 ÉPREUVE E5 -->
+<div class="page" id="p-e5">
+  <div class="pg">
+    <h1 class="pg-title">ÉPREU<span class="acc">VE E5</span></h1>
+    <div class="pg-line"><span class="pg-tag">// Intégration de services informatiques · Labs &amp; Projets BTS</span></div>
+    <div class="lab-list">
+      <div class="lab-item">
+        <div class="lab-header"><div class="lab-num">01</div><div class="lab-meta"><div class="lab-title">Réseau d'entreprise avec Active Directory</div><div class="lab-stack"><span class="tag">Windows Server 2022</span><span class="tag">Active Directory</span><span class="tag">GPO</span><span class="tag">Cisco Layer 3</span><span class="tag">pfSense</span><span class="tag">VMware</span><span class="tag">Samba</span><span class="tag">vsftpd</span></div></div></div>
+        <div class="lab-body"><ul class="lab-points"><li>Déploiement d'un domaine AD : utilisateurs, groupes, unités d'organisation (OU), application de GPO</li><li>VLAN 10/11 sur switch Cisco Layer 3 et routage inter-VLAN</li><li>Firewall pfSense : NAT/PAT, règles de filtrage, cloisonnement réseau</li><li>Partage réseau Samba et serveur FTP vsftpd configurés et sécurisés</li><li>Documentation complète et schémas réseau draw.io</li></ul></div>
+      </div>
+      <div class="lab-item">
+        <div class="lab-header"><div class="lab-num">02</div><div class="lab-meta"><div class="lab-title">Serveur web LAMP sécurisé</div><div class="lab-stack"><span class="tag">Debian 12</span><span class="tag">Apache2</span><span class="tag">PHP</span><span class="tag">MariaDB</span><span class="tag">pfSense</span><span class="tag">VMware</span></div></div></div>
+        <div class="lab-body"><ul class="lab-points"><li>Hébergement d'un site dynamique sur stack LAMP complète (Apache2 + PHP + MariaDB)</li><li>Sécurisation pfSense : ports 80/443 ouverts uniquement, règles de filtrage entrantes</li><li>Documentation et schémas réseau draw.io</li></ul></div>
+      </div>
+      <div class="lab-item">
+        <div class="lab-header"><div class="lab-num">03</div><div class="lab-meta"><div class="lab-title">Infrastructure multi-services virtualisée</div><div class="lab-stack"><span class="tag">Proxmox VE</span><span class="tag">5 VMs</span><span class="tag">Apache2</span><span class="tag">MariaDB</span><span class="tag">Samba/FTP</span><span class="tag">AD</span><span class="tag">pfSense</span></div></div></div>
+        <div class="lab-body"><ul class="lab-points"><li>Déploiement de 5 VMs sur hyperviseur Proxmox VE</li><li>Configuration des bridges réseau, allocation CPU/RAM optimisée par VM</li><li>Gestion des snapshots et restauration d'environnement</li><li>Documentation complète</li></ul></div>
+      </div>
+      <div class="lab-item">
+        <div class="lab-header"><div class="lab-num">04</div><div class="lab-meta"><div class="lab-title">Projet LuckyNet — Micro-réseau Cisco</div><div class="lab-stack"><span class="tag">Cisco Catalyst 2960</span><span class="tag">Cisco 2800</span><span class="tag">PuTTY</span><span class="tag">Projet BTS</span></div></div></div>
+        <div class="lab-body"><ul class="lab-points"><li>Conception et installation d'un micro-réseau (2 postes + switch Catalyst 2960 + routeur 2800)</li><li>Configuration de 2 VLAN avec port trunk, encapsulation dot1Q et routage inter-VLAN</li><li>Tests de connectivité ping, sauvegarde des configurations IOS</li><li>Rédaction du rapport technique complet</li></ul></div>
+      </div>
+    </div>
+  </div>
+  <div class="ghostnum">06</div>
+</div>
+
+<!-- 07 ÉPREUVE E6 -->
+<div class="page" id="p-e6">
+  <div class="pg">
+    <h1 class="pg-title">ÉPREU<span class="acc">VE E6</span></h1>
+    <div class="pg-line"><span class="pg-tag">// Parcours de professionnalisation · Projet infrastructure</span></div>
+    <div class="e6-hero">
+      <div class="e6-ref">Réf. E6 · CFA INSTA · Février 2026 · Projet individuel</div>
+      <div class="e6-proj-title">Mise en place d'une infrastructure réseau LAN segmentée en VLANs avec accès Internet sécurisé</div>
+      <div class="e6-context">Switch Cisco Catalyst Layer 3 · Architecture complète sans routeur externe</div>
+      <div class="e6-stack"><span class="tag">Cisco Catalyst L3</span><span class="tag">Cisco IOS CLI</span><span class="tag">VLAN</span><span class="tag">SVI</span><span class="tag">DHCP</span><span class="tag">NAT/PAT</span><span class="tag">ACL étendue</span><span class="tag">IPv6</span><span class="tag">PuTTY</span><span class="tag">Wireshark</span></div>
+    </div>
+    <div class="e6-grid">
+      <div class="card">
+        <div class="card-tag">// Description du projet</div>
+        <p class="e6-desc">Dans le cadre de ma formation BTS SIO option SISR au CFA INSTA, j'ai conçu et déployé seul une <strong>infrastructure réseau d'entreprise</strong> simulant deux services isolés — Comptabilité et Direction — avec accès Internet sécurisé.<br><br>Architecture complète sur switch Cisco Catalyst Layer 3 : deux VLANs distincts (<strong>VLAN2 Comptabilité</strong> 192.168.2.0/24, <strong>VLAN3 Direction</strong> 192.168.3.0/24), routage inter-VLAN via <strong>interfaces SVI</strong>, trois pools DHCP.<br><br>Accès Internet via <strong>NAT/PAT</strong> sur l'interface WAN, protégé par une <strong>ACL étendue WAN_PROTECTION</strong> : blocage du spoofing, des scans NULL/FIN/XMAS, trafic de retour uniquement autorisé depuis le LAN. Base <strong>IPv6</strong> préparée pour migration future.</p>
+      </div>
+      <div class="card">
+        <div class="card-tag">// Compétences mobilisées</div>
+        <ul class="e6-skills">
+          <li>Conception et déploiement d'infrastructure réseau (VLAN, routage L3, DHCP, NAT)</li>
+          <li>Sécurisation d'un périmètre WAN via ACL Cisco IOS</li>
+          <li>Dépannage réseau (PuTTY, Wireshark, CLI)</li>
+          <li>Tests et validation : ping inter-VLAN, DHCP, navigation web, audit ACL</li>
+          <li>Documentation technique complète</li>
+        </ul>
+        <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--bdr)">
+          <div class="card-tag">// Tests réussis</div>
+          <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem"><span class="tag">✓ Ping inter-VLAN</span><span class="tag">✓ DHCP auto</span><span class="tag">✓ Navigation web</span><span class="tag">✓ Audit ACL</span><span class="tag">✓ Anti-spoofing</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="e6-doc">
+      <div><div class="e6-doc-label">Document officiel E6</div><div class="e6-doc-name">SISR-Fiche-presentation-situation.docx</div></div>
+      <a href="https://instafr-my.sharepoint.com/:w:/g/personal/b_nkombo_insta_fr/IQC9xnVuzj0jT6VUuCUH1vUbAZ2XmZ5SOdHEWjlbJ-uChw8?e=ISq2Wi" target="_blank" class="e6-doc-link">Ouvrir le document ↗</a>
+    </div>
+    <div class="e6-schema" style="margin-top:1.25rem">
+      <p>[ Schéma réseau — disponible dans le document officiel ]</p>
+      <p style="margin-top:.4rem;opacity:.6">VLAN2 (192.168.2.x) ←── Switch L3 ──→ VLAN3 (192.168.3.x) · WAN → NAT/PAT → Internet</p>
+    </div>
+  </div>
+  <div class="ghostnum">07</div>
+</div>
+
+<!-- 08 BACKSTAGE -->
+<div class="page" id="p-labs">
+  <div class="pg">
+    <h1 class="pg-title">BACK<span class="acc">STAGE</span></h1>
+    <div class="pg-line"><span class="pg-tag">// Ce qu'il y a derrière le code</span></div>
+    <div class="backstage-quote">
+      <p>Un portfolio montre souvent le résultat final, mais rarement le chemin parcouru. J'ai choisi d'ouvrir ici mes dossiers Work in Progress — notes brutes, captures de déploiements d'infrastructure, journaux d'erreurs et sessions de debug.</p>
+      <cite>« L'ingénierie, c'est avant tout savoir pourquoi ça n'a pas marché la première fois pour faire en sorte que ça tourne parfaitement la seconde. »</cite>
+    </div>
+    <div class="section-label">PROJETS <span class="acc">EN COURS</span></div>
+    <div class="wip-grid">
+      <div class="wip-card"><div class="wip-icon">🔐</div><div class="wip-name">Lab Sécurité avancée</div><div class="wip-tag-wrap"><span class="tag">pfSense</span><span class="tag">VPN</span><span class="tag">DMZ</span></div></div>
+      <div class="wip-card"><div class="wip-icon">📊</div><div class="wip-name">Monitoring réseau</div><div class="wip-tag-wrap"><span class="tag">GLPI</span><span class="tag">SNMP</span></div></div>
+      <div class="wip-card"><div class="wip-icon">🤖</div><div class="wip-name">IA &amp; Firewall (ZTNA)</div><div class="wip-tag-wrap"><span class="tag">Veille</span><span class="tag">IA réseau</span></div></div>
+      <div class="wip-card"><div class="wip-icon">🐧</div><div class="wip-name">Scripting Bash</div><div class="wip-tag-wrap"><span class="tag">Linux</span><span class="tag">Debian</span></div></div>
+      <div class="wip-card"><div class="wip-icon">⚡</div><div class="wip-name">Proxmox cluster</div><div class="wip-tag-wrap"><span class="tag">Proxmox VE</span><span class="tag">HA</span></div></div>
+      <div class="wip-card"><div class="wip-icon">🌐</div><div class="wip-name">IPv6 déploiement</div><div class="wip-tag-wrap"><span class="tag">IPv6</span><span class="tag">Dual-stack</span></div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-label">CONTACT <span class="acc">&amp; LIENS</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:.75rem;position:relative;z-index:1">
+      <a href="mailto:brunonbe28@gmail.com" class="btn btn-mint">✉ brunonbe28@gmail.com</a>
+      
+      <a href="https://www.linkedin.com/in/bruno-nkombo" target="_blank" class="btn btn-ghost">LinkedIn ↗</a>
+    </div>
+  </div>
+  <div class="ghostnum">08</div>
+</div>
+
+</main>
+
+<script>
+const pages=document.querySelectorAll('.page');
+const navLinks=document.querySelectorAll('.sb-nav a');
+const bread=document.getElementById('bread');
+const labels={'p-home':'ACCUEIL','p-about':'PRÉSENTATION','p-bts':'BTS SIO','p-veille':'VEILLE TECHNO','p-certs':'CERTIFICATIONS','p-e5':'ÉPREUVE E5','p-e6':'ÉPREUVE E6','p-labs':'BACKSTAGE'};
+let current='p-home';
+
+function go(id){
+  if(id===current)return;
+  const prev=document.getElementById(current);
+  const next=document.getElementById(id);
+  prev.classList.add('out');
+  setTimeout(()=>{prev.classList.remove('on','out');},300);
+  next.classList.add('on');
+  navLinks.forEach(a=>a.classList.toggle('on',a.dataset.page===id));
+  bread.textContent='PORTFOLIO · '+(labels[id]||'');
+  current=id;next.scrollTop=0;
+  document.getElementById('sb').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('ham').classList.remove('open');
+  if(id==='p-veille'&&!feedLoaded)loadFeed();
+}
+document.querySelectorAll('[data-page]').forEach(el=>{
+  el.addEventListener('click',e=>{e.preventDefault();go(el.dataset.page);});
+});
+
+const ham=document.getElementById('ham');
+const sb=document.getElementById('sb');
+const overlay=document.getElementById('overlay');
+ham.addEventListener('click',()=>{
+  const open=sb.classList.toggle('open');
+  overlay.classList.toggle('show',open);
+  ham.classList.toggle('open',open);
+});
+overlay.addEventListener('click',()=>{sb.classList.remove('open');overlay.classList.remove('show');ham.classList.remove('open');});
+
+// CANVAS
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+let nodes=[],W,H,raf;
+function resize(){W=canvas.width=canvas.parentElement.clientWidth;H=canvas.height=canvas.parentElement.clientHeight;}
+function initNodes(n){nodes=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.5+1.5}));}
+function drawCanvas(){
+  ctx.clearRect(0,0,W,H);
+  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.hypot(dx,dy);if(d<160){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(173,239,209,${.12*(1-d/160)})`;ctx.lineWidth=.6;ctx.stroke();}}
+  nodes.forEach(n=>{ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(173,239,209,.55)';ctx.fill();n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1;});
+  raf=requestAnimationFrame(drawCanvas);
+}
+resize();initNodes(22);drawCanvas();
+window.addEventListener('resize',()=>{resize();});
+new MutationObserver(()=>{const homeOn=document.getElementById('p-home').classList.contains('on');if(homeOn&&!raf){drawCanvas();}else if(!homeOn){cancelAnimationFrame(raf);raf=null;}}).observe(document.getElementById('p-home'),{attributes:true,attributeFilter:['class']});
+
+// RSS FEED
+let feedLoaded=false;
+async function loadFeed(){
+  const el=document.getElementById('ztna-feed');
+  const ts=document.getElementById('feed-ts');
+  el.innerHTML='<div class="feed-loading">Chargement des actualités ZTNA…</div>';
+  const rssUrl=encodeURIComponent('https://news.google.com/rss/search?q=ZTNA+Zero+Trust+Network+Access&hl=fr&gl=FR&ceid=FR:fr');
+  const api=`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}&count=6`;
+  try{
+    const r=await fetch(api);
+    const d=await r.json();
+    if(d.status==='ok'&&d.items&&d.items.length>0){
+      el.innerHTML=d.items.map(item=>{
+        let src='';try{src=new URL(item.link).hostname.replace('www.','');}catch(e){src=item.author||'Source';}
+        const dt=new Date(item.pubDate);
+        const dts=dt.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'});
+        const title=item.title.replace(/ - .+$/,'').replace(/ \| .+$/,'');
+        return `<div class="feed-item"><div class="feed-date">${dts}</div><a href="${item.link}" target="_blank" class="feed-title">${title}</a><div class="feed-source">${src}</div></div>`;
+      }).join('');
+      ts.textContent='MAJ · '+new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+      feedLoaded=true;
+    }else{
+      el.innerHTML='<div class="feed-error">Flux momentanément indisponible.<br><span style="font-size:.75rem;opacity:.6">Essayez de rafraîchir ou consultez directement Google News.</span></div>';
+    }
+  }catch(e){
+    el.innerHTML='<div class="feed-error">Impossible de charger le flux.<br><span style="font-size:.75rem;opacity:.6">Vérifiez votre connexion internet.</span></div>';
+  }
+}
+</script>
+</body>
+</html>
