@@ -1,9 +1,58 @@
 {
   "version": 1,
-  "status": "pending",
-  "generated_at": null,
-  "checked_at": null,
-  "budget": {"month": "", "calls": 0},
-  "processed_ids": [],
-  "articles": []
+  "status": "ready",
+  "generated_at": "2026-11-13T10:22:09.912888+00:00",
+  "checked_at": "2026-11-13T10:22:09.912879+00:00",
+  "budget": {
+    "month": "2026-11",
+    "calls": 2
+  },
+  "processed_ids": [
+    "00c0d50ee486abcb00dc",
+    "69e02bce673167be0d5c"
+  ],
+  "articles": [
+    {
+      "id": "00c0d50ee486abcb00dc",
+      "url": "https://blogs.cisco.com/networking/agentic-ai-demands-a-stronger-more-assured-network-foundation/",
+      "source_title": "Agentic AI demands a stronger, more assured network foundation",
+      "source": "Cisco Networking",
+      "published_at": "2026-11-09T20:00:14+00:00",
+      "title": "Intégration de l'IA agentique dans les architectures réseau sécurisées",
+      "summary": "Le texte aborde l'intégration de l'intelligence artificielle agentique dans la gestion des réseaux et la supervision. Il présente des outils d'automatisation et de télémétrie pour le diagnostic des pannes, l'optimisation des performances applicatives et la prise de décision autonome. Sont également évoquées des solutions de sécurité axées sur la cryptographie post-quantique pour les réseaux sans fil et la protection contre les vulnérabilités. Ces évolutions visent à renforcer la résilience des infrastructures face aux menaces émergentes.",
+      "key_points": [
+        "Utilisation de l'IA agentique pour automatiser les processus NetOps.",
+        "Intégration de la télémétrie et de la supervision pour optimiser la visibilité.",
+        "Déploiement de mesures de sécurité contre les menaces post-quantiques."
+      ],
+      "sisr": "Étudier la mise en place d'outils de supervision automatisée et de télémétrie réseau pour anticiper les incidents et optimiser la réactivité des infrastructures.",
+      "limits": "Le texte provient d'un discours éditeur (Cisco) et ne comporte pas d'évaluation indépendante des solutions présentées.",
+      "topic": "automatisation",
+      "generated_at": "2026-11-13T10:22:09.912858+00:00",
+      "model": "gemini-3.5-flash-lite",
+      "truncated": false,
+      "reviewed": false
+    },
+    {
+      "id": "69e02bce673167be0d5c",
+      "url": "https://blogs.cisco.com/networking/dynamic-model-routing-the-new-sd-wan-for-the-ai-era/",
+      "source_title": "Dynamic model routing: The new SD-WAN for the AI era",
+      "source": "Cisco Networking",
+      "published_at": "2026-11-09T20:00:59+00:00",
+      "title": "Routage dynamique des modèles et architectures réseau",
+      "summary": "Cet article analyse l'intégration du routage dynamique des modèles d'intelligence artificielle dans les architectures réseau d'entreprise, comparable au fonctionnement du SD-WAN. Face à la complexité croissante des flux et aux coûts des grands modèles de langage, cette approche utilise la télémétrie réseau et des politiques en temps réel pour orienter chaque requête vers l'endpoint optimal, qu'il s'agisse d'un modèle local spécialisé ou d'un LLM distant. L'objectif est d'optimiser la latence, les coûts en tokens et la sécurité des données tout en garantissant la performance globale des applications et des agents autonomes.",
+      "key_points": [
+        "Le routage dynamique des modèles dirige les requêtes IA selon la complexité, le coût et la confidentialité.",
+        "Il permet d'utiliser des modèles locaux ou spécialisés pour réduire la consommation de tokens et la latence.",
+        "La visibilité cross-domaine et la couche d'assurance garantissent la conformité et la performance des flux."
+      ],
+      "sisr": "Étudier la mise en place d'une couche de routage dynamique pour optimiser l'orientation du trafic IA et la répartition des charges entre infrastructures locales et cloud.",
+      "limits": "Discours éditeur émanant de Cisco, absence de validation indépendante des performances annoncées.",
+      "topic": "automatisation",
+      "generated_at": "2026-11-13T10:22:01.705852+00:00",
+      "model": "gemini-3.5-flash-lite",
+      "truncated": false,
+      "reviewed": false
+    }
+  ]
 }
