@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="description" content="Portfolio de Bruno N’KOMBO, étudiant en BTS SIO SISR : projets systèmes et réseaux, veille IA, engagement étudiant EF4 et outil pédagogique de sécurité.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bruno N'KOMBO · Portfolio BTS SIO SISR</title>
 
@@ -14,6 +14,7 @@
 
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/engine.css">
+<link rel="stylesheet" href="assets/veille.css">
 <noscript><link rel="stylesheet" href="assets/no-script.css"></noscript>
 </head>
 <body class="techno"><a class="skip" href="#p-home">Aller au contenu</a>
@@ -180,6 +181,17 @@
   <h1 class="pg-title">L’IA dans les<br><span class="acc">architectures réseau.</span></h1>
   <p class="lead-v2">Comment intégrer l’intelligence artificielle pour superviser, optimiser et administrer un réseau, tout en gardant la maîtrise de ses décisions ?</p>
   <div class="meta-v2"><span>VEILLE TECHNOLOGIQUE / BTS SIO SISR</span><span>Sélection initiale · 30 octobre 2026</span></div>
+  <section class="watch-feed" id="watch-feed" aria-labelledby="watch-title" aria-busy="false">
+    <div class="watch-heading"><div><span class="kicker-v2">LE FLUX / IA &amp; ARCHITECTURES RÉSEAU</span><h2 id="watch-title">L’actualité, l’essentiel, le recul.</h2><p>Des lectures ciblées, des synthèses courtes et une piste concrète pour le SISR. Chaque résumé garde un lien vers sa source.</p></div><button class="btn btn-ghost" type="button" id="watch-refresh">Actualiser le flux ↻</button></div>
+    <ol class="watch-circuit" aria-label="Circuit de préparation des synthèses"><li><span>01 / REPÉRER</span>Sources RSS</li><li><span>02 / LIRE</span>Article original</li><li><span>03 / SYNTHÉTISER</span>Résumé par IA</li><li><span>04 / EXPLORER</span>Fiche de veille</li></ol>
+    <p class="watch-status" id="watch-status" role="status" aria-live="polite">Chargement des synthèses publiées…</p>
+    <div class="watch-tools"><div class="filters-v2" role="group" aria-label="Filtrer les synthèses IA"><button type="button" data-watch-filter="all" aria-pressed="true">Toutes</button><button type="button" data-watch-filter="supervision" aria-pressed="false">Supervision</button><button type="button" data-watch-filter="automatisation" aria-pressed="false">Automatisation</button><button type="button" data-watch-filter="risques" aria-pressed="false">Risques</button></div><div class="watch-search"><label for="watch-search">Rechercher dans les synthèses</label><input id="watch-search" type="search" placeholder="Ex. diagnostic, agents, réseau…" maxlength="120"></div></div>
+    <p class="muted-v2" id="watch-count">0 synthèse affichée</p>
+    <div class="watch-layout"><div class="watch-list" id="watch-list" aria-label="Articles disponibles"></div><section class="watch-reader" id="watch-reader" aria-label="Résumé de l’article sélectionné"><span class="kicker-v2">SYNTHÈSE / IA &amp; RÉSEAUX</span><h3>Choisis une lecture.</h3><p>Les points clés, l’intérêt SISR et les limites apparaîtront ici.</p></section></div>
+    <p class="muted-v2">Source du flux : Cisco Networking · Publications éditeur, à confronter à d’autres références. Actualiser recharge les fiches déjà publiées ; ce bouton ne lance pas une nouvelle génération.</p>
+    <details class="watch-author"><summary>Espace auteur · préparer de nouvelles synthèses</summary><p>La génération est réservée au propriétaire du dépôt. Chaque lancement traite au maximum trois nouveaux articles. Les visiteurs consultent les fiches sans déclencher de dépense.</p><a class="text-link-v2" href="https://github.com/brunonkombo/portfolio/actions/workflows/portfolio.yml" target="_blank" rel="noopener noreferrer">Ouvrir l’espace de génération ↗</a></details>
+    <noscript><p>Active JavaScript pour consulter le flux interactif. Les sources documentaires restent lisibles ci-dessous.</p></noscript>
+  </section>
   <section class="feature-v2"><div><span class="kicker-v2">LE PÉRIMÈTRE</span><h2>Une IA au service du réseau.</h2><p>Cette veille porte sur l’IA utilisée pour exploiter les réseaux : détecter une anomalie, aider au diagnostic, prévoir une dégradation ou proposer une configuration. L’infrastructure nécessaire pour entraîner de grands modèles est un sujet différent.</p><p>Le machine learning peut repérer des écarts dans la télémétrie. Un modèle de langage peut aider à expliquer un incident. Une action sur le réseau exige ensuite des règles, des tests et des droits limités.</p></div><aside class="note-v2"><span class="kicker-v2">QUESTION DIRECTRICE</span><h3>Jusqu’où automatiser ?</h3><p>Le gain de temps doit se comparer aux erreurs possibles, au coût, à la confidentialité des données et à la capacité de revenir en arrière.</p></aside></section>
   <section aria-labelledby="architecture-title"><div class="section-head-v2"><span class="kicker-v2">01 / COMPRENDRE L’ARCHITECTURE</span><h2 id="architecture-title">De la mesure à l’action.</h2></div>
    <ol class="pipeline-v2"><li><span>01</span><h3>Collecter</h3><p>Journaux, métriques, flux et événements réseau.</p></li><li><span>02</span><h3>Analyser</h3><p>Modèle IA : corrélation, détection, prédiction.</p></li><li><span>03</span><h3>Valider</h3><p>Administrateur, règles et tests dans un lab.</p></li><li><span>04</span><h3>Agir &amp; vérifier</h3><p>Action limitée, contrôle du résultat et retour arrière.</p></li></ol>
@@ -199,7 +211,7 @@
    </div>
   </section>
   <section class="feature-v2 lab-proposal"><div><span class="kicker-v2">04 / EXPÉRIMENTATION ENVISAGÉE</span><h2>Un mini-lab pour vérifier les promesses.</h2><p>Comparer une détection par seuils à une détection d’anomalies sur des métriques de lab : latence, pertes et débit. Utiliser des données synthétiques ou anonymisées, conserver des scénarios de test séparés et compter les fausses alertes.</p></div><aside class="note-v2"><span class="status-v2">À CONSTRUIRE</span><p>Aucun résultat n’est annoncé à ce stade. La première version pourra seulement recommander une action, avec validation humaine avant toute modification réseau.</p></aside></section>
-  <details class="details-v2"><summary>Méthode de veille proposée</summary><p>Une lecture régulière des sources officielles, une fiche par publication et une synthèse à chaque expérimentation. Pour chaque fiche : date de publication, date de consultation, idée essentielle, limites, intérêt SISR et avis personnel. Aucun suivi automatique n’est activé sur ce site.</p></details>
+  <details class="details-v2"><summary>Méthode de veille proposée</summary><p>Une lecture régulière des sources officielles, une fiche par publication et une synthèse à chaque expérimentation. Pour chaque fiche : date de publication, date de consultation, idée essentielle, limites, intérêt SISR et avis personnel. Un flux RSS complète ces lectures : les synthèses IA sont préparées à la demande, puis publiées ici. Elles doivent être confrontées aux sources avant de servir à une analyse personnelle.</p></details>
  </div>
 </div>
 
@@ -398,6 +410,6 @@
 </main>
 
 <script src="assets/app.js" defer></script><script src="assets/techno.js" defer></script>
-<script src="assets/security.js" defer></script><script src="assets/content.js" defer></script>
+<script src="assets/security.js" defer></script><script src="assets/content.js" defer></script><script src="assets/veille.js" defer></script>
 </body>
 </html>

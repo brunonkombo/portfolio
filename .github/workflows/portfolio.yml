@@ -1,0 +1,74 @@
+name: Portfolio - publication et veille IA
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      generer_veille:
+        description: 'Générer jusqu’à 3 nouvelles synthèses (API payante)'
+        required: true
+        type: boolean
+        default: true
+
+# Un seul traitement : évite les doublons et protège le compteur de consommation.
+concurrency:
+  group: portfolio-publication
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Vérifier le traitement de veille
+        run: python -m unittest discover -s tests -p 'test_veille.py'
+      - name: Vérifier les données affichées
+        run: node --test tests/veille.test.cjs
+      - name: Générer les synthèses
+        id: generate
+        if: github.event_name == 'workflow_dispatch' && inputs.generer_veille
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python scripts/update_veille.py
+      - name: Sauvegarder les résumés et le compteur même en cas d’échec API
+        if: always() && steps.generate.outcome != 'skipped'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- data/veille.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Actualiser la veille IA et son compteur"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Préparer le site statique
+        run: python scripts/build_site.py
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publier le portfolio
+        id: deployment
+        uses: actions/deploy-pages@v4

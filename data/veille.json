@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "status": "pending",
+  "generated_at": null,
+  "checked_at": null,
+  "budget": {"month": "", "calls": 0},
+  "processed_ids": [],
+  "articles": []
+}
