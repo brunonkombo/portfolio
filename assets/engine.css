@@ -299,3 +299,4 @@ body.techno{font-family:Manrope,'Segoe UI',sans-serif}.techno h1,.techno h2,.tec
 .inline-10{margin-top:1.25rem}
 .inline-11{margin-top:.4rem;opacity:.6}
 .inline-12{display:flex;flex-wrap:wrap;gap:.75rem;position:relative;z-index:1}
+.exp-card + .exp-card{margin-top:1.5rem}
