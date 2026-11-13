@@ -10,6 +10,9 @@
     for (const [key, limit] of Object.entries({id: 40, title: 200, summary: 1200, sisr: 650, limits: 650, source: 100, source_title: 250, model: 100})) {
       if (typeof a[key] !== 'string' || !a[key].trim() || a[key].length > limit) return false;
     }
+    for (const key of ['why_important', 'admin_use', 'engineer_use']) {
+      if (a[key] !== undefined && (typeof a[key] !== 'string' || !a[key].trim() || a[key].length > 650)) return false;
+    }
     return Object.hasOwn(topics, a.topic) && Array.isArray(a.key_points) && a.key_points.length >= 1 && a.key_points.length <= 3 &&
       a.key_points.every(p => typeof p === 'string' && p.trim() && p.length <= 400) &&
       ['published_at', 'generated_at'].every(k => typeof a[k] === 'string' && Number.isFinite(Date.parse(a[k])));
@@ -24,7 +27,7 @@
   const refresh = document.getElementById('watch-refresh');
   const search = document.getElementById('watch-search');
   const count = document.getElementById('watch-count');
-  let articles = [], filter = 'all', selected = null, busy = false, loaded = false;
+  let articles = [], period = 'recent', filter = 'all', selected = null, busy = false, loaded = false;
   const date = value => new Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium' }).format(new Date(value));
   function el(tag, text, className) {
     const node = document.createElement(tag);
@@ -34,7 +37,7 @@
   }
   function placeholder(message) {
     reader.replaceChildren(el('span', 'SYNTHÈSE / IA & RÉSEAUX', 'kicker-v2'), el('h3', message),
-      el('p', 'Les fiches associent un résumé, trois points clés, une piste SISR et les limites de la source.'));
+      el('p', 'Les fiches expliquent l’essentiel, son importance et les compétences utiles à un futur administrateur ou ingénieur réseau.'));
   }
   function openArticle(article, focus = false) {
     selected = article.id;
@@ -45,7 +48,12 @@
     reader.append(title, el('p', article.summary, 'watch-summary'));
     const points = el('ul', undefined, 'list-v2');
     article.key_points.forEach(point => points.append(el('li', point)));
-    reader.append(el('h4', 'À retenir'), points, el('h4', 'Une piste pour le SISR'), el('p', article.sisr),
+    reader.append(el('h4', 'À retenir'), points);
+    if (article.why_important) reader.append(el('h4', 'Pourquoi cette information compte'), el('p', article.why_important));
+    if (article.admin_use) reader.append(el('h4', 'Pour un futur administrateur'), el('p', article.admin_use, 'watch-role'));
+    if (article.engineer_use) reader.append(el('h4', 'Pour un futur ingénieur réseau'), el('p', article.engineer_use, 'watch-role'));
+    if (article.admin_use || article.engineer_use) reader.append(el('p', 'Pistes d’apprentissage proposées par l’IA : à expérimenter et à valider en laboratoire.', 'muted-v2'));
+    reader.append( el('h4', 'Une piste pour le SISR'), el('p', article.sisr),
       el('h4', 'Limites et recul critique'), el('p', article.limits));
     const link = el('a', 'Lire l’article original ↗', 'text-link-v2');
     link.href = article.url; link.target = '_blank'; link.rel = 'noopener noreferrer';
@@ -58,12 +66,13 @@
   }
   function render() {
     const query = search.value.trim().toLocaleLowerCase('fr');
-    const shown = articles.filter(a => (filter === 'all' || a.topic === filter) &&
-      (a.title + ' ' + a.summary + ' ' + a.source).toLocaleLowerCase('fr').includes(query));
+    const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const shown = articles.filter(a => (period === 'all' || Date.parse(a.published_at) >= cutoff) && (filter === 'all' || a.topic === filter) &&
+      (a.title + ' ' + a.summary + ' ' + a.source).toLocaleLowerCase('fr').includes(query)).sort((a, b) => Date.parse(b.published_at) - Date.parse(a.published_at));
     list.replaceChildren();
     count.textContent = shown.length + (shown.length === 1 ? ' synthèse affichée' : ' synthèses affichées');
     if (!shown.length) {
-      list.append(el('p', articles.length ? 'Aucun article ne correspond à ce filtre.' : 'Les premières synthèses apparaîtront ici après activation du flux.', 'watch-empty'));
+      list.append(el('p', articles.length ? 'Aucun article ne correspond à cette période et à ce filtre. Consulte les archives ou actualise après une nouvelle génération.' : 'Les premières synthèses apparaîtront ici après activation du flux.', 'watch-empty'));
       selected = null;
       placeholder(articles.length ? 'Essaie un autre filtre.' : 'Le carnet attend ses premières lectures.');
       return;
@@ -106,6 +115,7 @@
       busy = false; refresh.disabled = false; root.setAttribute('aria-busy', 'false');
     }
   }
+  document.getElementById('watch-period').addEventListener('change', event => { period = event.target.value; render(); });
   refresh.addEventListener('click', load);
   search.addEventListener('input', render);
   root.querySelectorAll('[data-watch-filter]').forEach(button => button.addEventListener('click', () => {

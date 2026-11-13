@@ -16,7 +16,9 @@ spec.loader.exec_module(veille)
 def summary():
     return {'relevant': True, 'title': 'Une supervision assistée', 'summary': 'Le document présente une méthode de diagnostic.',
             'key_points': ['Une proposition à tester.'], 'sisr': 'Comparer les alertes dans un lab.',
-            'limits': 'Présentation éditeur.', 'topic': 'supervision'}
+            'limits': 'Présentation éditeur.', 'topic': 'supervision',
+            'why_important': 'Une évolution du diagnostic à évaluer.', 'admin_use': 'Tester les alertes dans un lab.',
+            'engineer_use': 'Comparer les architectures selon leur résilience.'}
 
 
 class VeilleTests(unittest.TestCase):
@@ -118,6 +120,22 @@ class VeilleTests(unittest.TestCase):
         self.assertEqual(len(state['articles']), 6)
         self.assertEqual(len({a['id'] for a in state['articles']}), 6)
         self.assertTrue(first_ids <= {a['id'] for a in state['articles']})
+
+    def test_articles_older_than_30_days_excluded(self):
+        xml = '<rss><channel><item><title>AI network monitoring</title><link>https://blogs.cisco.com/networking/old/</link><pubDate>Wed, 01 Oct 2026 12:00:00 GMT</pubDate></item></channel></rss>'
+        self.assertEqual(veille.parse_feed(xml, datetime(2026, 11, 13, tzinfo=timezone.utc)), [])
+
+    def test_legacy_enrichment_preserves_budget_and_avoids_duplicates(self):
+        file, api = self.run_fixture(calls=2)
+        state = json.loads(file.read_text())
+        state['articles'] = [{'id': '0', 'summary_version': 1}]
+        state['processed_ids'] = ['0']
+        file.write_text(json.dumps(state))
+        veille.run()
+        state = json.loads(file.read_text())
+        self.assertEqual(state['budget']['calls'], 5)
+        self.assertEqual(len([a for a in state['articles'] if a['id'] == '0']), 1)
+        self.assertTrue(all(a['summary_version'] == 2 for a in state['articles']))
 
     def test_monthly_cap(self):
         file, api = self.run_fixture(calls=59)
