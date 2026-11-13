@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       generer_veille:
-        description: 'Générer jusqu’à 3 nouvelles synthèses (API payante)'
+        description: 'Générer jusqu’à 3 nouvelles synthèses (Gemini, quota gratuit selon le projet)'
         required: true
         type: boolean
         default: true
@@ -41,7 +41,7 @@ jobs:
         id: generate
         if: github.event_name == 'workflow_dispatch' && inputs.generer_veille
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python scripts/update_veille.py
       - name: Sauvegarder les résumés et le compteur même en cas d’échec API
         if: always() && steps.generate.outcome != 'skipped'

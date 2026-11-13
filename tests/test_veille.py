@@ -66,11 +66,31 @@ class VeilleTests(unittest.TestCase):
         class Response:
             def __enter__(self): return self
             def __exit__(self, *args): pass
-            def read(self, size): return b'{"status":"incomplete","output":[]}'
+            def read(self, size): return b'{"candidates":[{"finishReason":"MAX_TOKENS","content":{"parts":[]}}]}'
         with patch.object(veille.urllib.request, 'build_opener') as opener:
             opener.return_value.open.return_value = Response()
             with self.assertRaises(ValueError):
                 veille.summarize({'source_title': 'Source'}, 'texte', 'test-key')
+
+    def test_gemini_success_and_secret_header(self):
+        data = {'candidates': [{'finishReason': 'STOP', 'content': {'parts': [
+            {'thought': True, 'text': 'Internal thought excluded'},
+            {'text': json.dumps(summary())}
+        ]}}]}
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, size): return json.dumps(data).encode()
+        with patch.object(veille.urllib.request, 'build_opener') as opener:
+            opener.return_value.open.return_value = Response()
+            self.assertEqual(veille.summarize({'source_title': 'Article'}, 'body', 'test-key'), summary())
+            request = opener.return_value.open.call_args.args[0]
+            self.assertTrue(request.full_url.startswith('https://generativelanguage.googleapis.com/'))
+            self.assertNotIn('test-key', request.full_url)
+            self.assertEqual(request.get_header('X-goog-api-key'), 'test-key')
+            payload = json.loads(request.data)
+            self.assertNotIn('test-key', json.dumps(payload))
+            self.assertEqual(payload['generationConfig']['responseMimeType'], 'application/json')
 
     def run_fixture(self, calls=0, api_error=False):
         temp = tempfile.TemporaryDirectory()
@@ -84,7 +104,7 @@ class VeilleTests(unittest.TestCase):
         self.enterContext(patch.object(veille, 'DATA', file))
         self.enterContext(patch.object(veille, 'fetch_source', side_effect=fetch))
         self.enterContext(patch.object(veille, 'parse_feed', return_value=candidates))
-        self.enterContext(patch.dict(os.environ, {'OPENAI_API_KEY': 'test-only'}))
+        self.enterContext(patch.dict(os.environ, {'GEMINI_API_KEY': 'test-only'}))
         api = self.enterContext(patch.object(veille, 'summarize', side_effect=HTTPError('api', 429, 'Quota', {}, None) if api_error else lambda *args: summary()))
         return file, api
 

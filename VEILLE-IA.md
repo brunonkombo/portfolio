@@ -1,36 +1,36 @@
-# Veille IA & architectures réseau
+# Veille IA avec Gemini
 
-Le site reste statique. GitHub Actions récupère le RSS Cisco Networking, filtre les publications sur l’IA et les réseaux datant de moins de 90 jours, lit leur contenu éditorial et appelle OpenAI. Les résumés sont enregistrés dans `data/veille.json`, puis le portfolio est publié via GitHub Pages. Le navigateur charge uniquement ce fichier depuis son propre domaine.
+Le circuit lit le RSS Cisco Networking et les articles publics pertinents, puis demande une synthèse française à Gemini. Les fiches sont enregistrées dans `data/veille.json` et publiées via GitHub Pages. Le navigateur ne reçoit aucune clé.
 
-## Activation (une fois)
+## Activation gratuite
 
-1. Créer une clé dans un projet API OpenAI disposant de crédits. Configurer ses limites et alertes de dépense dans le tableau de bord OpenAI. Le budget de projet peut être une alerte plutôt qu’un arrêt strict : vérifier les paramètres de facturation du compte.
-2. Dans GitHub : **Settings → Secrets and variables → Actions → New repository secret**. Nom exact : `OPENAI_API_KEY`. Coller la clé uniquement dans le champ secret GitHub, jamais dans un fichier ou une conversation.
-3. Dans **Settings → Pages → Build and deployment → Source**, sélectionner **GitHub Actions**.
-4. Dans **Actions → Portfolio - publication et veille IA → Run workflow**, choisir `main`, cocher la génération et lancer. Décocher permet de republier sans aucun appel API.
+1. Créer une clé API dans https://aistudio.google.com/apikey avec un projet bénéficiant du **Free Tier**, sans activer la facturation. Une vérification du projet peut être demandée par Google.
+2. Dans GitHub : **Settings → Secrets and variables → Actions → New repository secret**. Nom exact : `GEMINI_API_KEY`. Coller la clé uniquement dans le champ Secret.
+3. Dans **Actions → Portfolio - publication et veille IA → Run workflow**, choisir `main` et cocher la génération. Décocher republie uniquement le site.
+4. GitHub Pages utilise **GitHub Actions** comme source de publication (déjà configuré).
 
-Si l’organisation interdit l’écriture par les workflows ou protège `main`, autoriser le workflow approprié ou adapter sa publication via PR. Aucun contournement de protection n’est prévu.
+Le flux n'utilise plus OpenAI ni le secret `OPENAI_API_KEY`. Aucun repli vers un fournisseur payant n'est prévu.
 
-## Budget
+## Gratuité et quotas
 
-- Modèle fixe : `gpt-4.1-mini-2025-04-14`.
-- Maximum 3 appels par lancement et 60 appels par mois UTC, y compris les tentatives en erreur.
-- Extrait de 10 000 caractères maximum ; sortie plafonnée à 1 000 tokens ; pas d’outil de recherche payant.
-- Aucun lancement programmé, aucun appel API à l’ouverture du site ou au clic public. Le bouton public recharge les résumés existants.
-- Les articles déjà traités sont mémorisés. Le compteur doit rester dans Git ; ne pas réinitialiser `data/veille.json` pour relancer une génération.
-- Tarif documentaire consulté le 13 novembre 2026 : 0,40 USD / million de tokens en entrée et 1,60 USD / million en sortie. Exemple indicatif : 3 000 tokens d’entrée + 800 de sortie ≈ 0,00248 USD par fiche, soit ≈ 0,15 USD pour 60 fiches. Ce n’est pas une garantie ni un plafond de facturation ; tarifs, longueur et taxes peuvent varier. Les consommations effectuées ailleurs avec la même clé ne sont pas comptées ici.
+- Modèle : `gemini-3.5-flash-lite`, proposé dans le Free Tier selon la documentation Google consultée le 13 novembre 2026.
+- La gratuité dépend du modèle, de l'éligibilité et de l'offre du projet Google. Le code ne peut pas vérifier l'état de facturation d'une clé : une clé provenant d'un projet payant peut entraîner des frais. Garder un projet Free Tier sans facturation pour éviter cela.
+- Maximum 3 appels par lancement et 60 par mois UTC, tentatives échouées incluses. Les limites Google peuvent être inférieures et évoluer. Un quota dépassé arrête les appels, sans nouvelle tentative automatique.
+- Extrait limité à 10 000 caractères, sortie à 1 000 tokens. Aucun outil payant de recherche ou d'exécution n'est utilisé.
+- Aucun lancement programmé. Les boutons publics consultent/rechargent les fiches publiées sans appeler le LLM.
+- Les articles déjà traités sont mémorisés ; ne pas réinitialiser le cache et son compteur pour relancer une génération.
 
-## Lire et vérifier
+## Sources et confidentialité
 
-Les fiches affichent la date de l’article, celle de la génération, trois points clés, une piste SISR proposée et les limites de la source. Elles sont étiquetées comme synthèses IA non validées personnellement. Les sources Cisco sont des publications éditeur, à confronter à des références indépendantes. Les lectures ETSI et NIST préexistantes restent dans le carnet documentaire.
+Uniquement des articles publics de Cisco Networking datant de moins de 90 jours. Leurs extraits sont envoyés à Google pour produire une synthèse ; le texte intégral n'est pas archivé dans Git. Selon l'offre gratuite et les conditions applicables, Google peut utiliser les données pour améliorer ses produits. Aucun document personnel, dossier AEIDF ou contenu confidentiel n'entre dans ce circuit.
 
-Le texte des articles n’est ni archivé dans Git ni publié intégralement. Un extrait est transmis à l’API OpenAI pour synthèse ; la requête utilise `store: false`. Cela ne constitue pas une promesse d’absence de journalisation par le fournisseur. Aucun document privé ou dossier AEIDF ne fait partie du circuit.
+Les fiches sont étiquetées comme synthèses IA à vérifier avec la source. Elles conservent les dates de publication et de génération, trois points clés, une piste SISR et les limites. Les références ETSI et NIST restent dans le carnet documentaire. Une synthèse IA ne remplace pas l'analyse personnelle.
 
 ## Protections
 
-Sources HTTPS limitées à `blogs.cisco.com/networking/`, vérification des redirections et adresses publiques, prise en compte de `robots.txt`, limites de taille et délais. Les pages sont du contenu non fiable : le LLM n’a aucun outil, aucune clé dans son texte d’entrée et reçoit un schéma de sortie strict. Les sorties sont validées et affichées avec `textContent`, jamais `innerHTML`. Une erreur conserve les fiches précédentes ; une authentification/quota refusé ne déclenche pas de nouvelle tentative automatique.
+Sources HTTPS limitées à `blogs.cisco.com/networking/`, contrôle des redirections et adresses publiques, `robots.txt`, tailles et délais limités. Les articles sont traités comme du contenu non fiable. Le LLM n'a ni outil ni accès aux secrets dans son contexte ; sortie JSON contrôlée et rendu via `textContent`. Les réponses bloquées ou tronquées sont refusées. Les fiches précédentes sont conservées en cas d'échec.
 
-## Vérifications locales
+## Vérifications
 
 ```text
 python -m unittest discover -s tests -p test_veille.py
@@ -39,11 +39,11 @@ python scripts/update_veille.py --dry-run
 python scripts/build_site.py
 ```
 
-Le mode `--dry-run` lit les sources publiques sans appeler le LLM ni modifier le cache. Pour consulter le site localement, utiliser un serveur HTTP : les navigateurs peuvent bloquer le chargement JSON depuis `file://`.
+Le mode `--dry-run` vérifie les sources sans appel LLM ni écriture. Un serveur HTTP est nécessaire pour charger le JSON en local.
 
-## Documentation
+## Documentation officielle
 
-- https://developers.openai.com/api/docs/models/gpt-4.1-mini
-- https://developers.openai.com/api/docs/guides/structured-outputs
+- https://aistudio.google.com/docs/pricing#gemini-3.5-flash-lite
+- https://aistudio.google.com/docs/api-key
+- https://aistudio.google.com/api-reference/generate-content
 - https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
-- https://blogs.cisco.com/networking/feed
