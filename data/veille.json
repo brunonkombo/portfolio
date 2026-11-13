@@ -1,11 +1,11 @@
 {
   "version": 1,
   "status": "ready",
-  "generated_at": "2026-11-13T10:22:09.912888+00:00",
-  "checked_at": "2026-11-13T10:22:09.912879+00:00",
+  "generated_at": "2026-11-13T10:31:25.191132+00:00",
+  "checked_at": "2026-11-13T10:31:25.191120+00:00",
   "budget": {
     "month": "2026-11",
-    "calls": 2
+    "calls": 4
   },
   "processed_ids": [
     "00c0d50ee486abcb00dc",
@@ -18,20 +18,24 @@
       "source_title": "Agentic AI demands a stronger, more assured network foundation",
       "source": "Cisco Networking",
       "published_at": "2026-11-09T20:00:14+00:00",
-      "title": "Intégration de l'IA agentique dans les architectures réseau sécurisées",
-      "summary": "Le texte aborde l'intégration de l'intelligence artificielle agentique dans la gestion des réseaux et la supervision. Il présente des outils d'automatisation et de télémétrie pour le diagnostic des pannes, l'optimisation des performances applicatives et la prise de décision autonome. Sont également évoquées des solutions de sécurité axées sur la cryptographie post-quantique pour les réseaux sans fil et la protection contre les vulnérabilités. Ces évolutions visent à renforcer la résilience des infrastructures face aux menaces émergentes.",
+      "title": "Cisco : IA agentique et résilience quantique pour les réseaux",
+      "summary": "L'article aborde l'intégration de l'intelligence artificielle agentique dans les opérations réseau (NetOps) et l'automatisation de la boucle de décision. L'éditeur présente de nouvelles fonctionnalités de télémétrie intégrée, des métriques d'expérience applicative et des actions autonomes gérées depuis une plateforme cloud. De plus, l'annonce intègre la cryptographie post-quantique pour le matériel Wi-Fi 7 et des mécanismes de protection dynamique des équipements contre les vulnérabilités.",
       "key_points": [
-        "Utilisation de l'IA agentique pour automatiser les processus NetOps.",
-        "Intégration de la télémétrie et de la supervision pour optimiser la visibilité.",
-        "Déploiement de mesures de sécurité contre les menaces post-quantiques."
+        "Déploiement automatisé de sondes de télémétrie sur les points d'accès",
+        "Introduction d'actions autonomes encadrées pour l'automatisation des tâches NetOps",
+        "Intégration de la cryptographie post-quantique et de protections dynamiques sur le matériel sans fil"
       ],
-      "sisr": "Étudier la mise en place d'outils de supervision automatisée et de télémétrie réseau pour anticiper les incidents et optimiser la réactivité des infrastructures.",
-      "limits": "Le texte provient d'un discours éditeur (Cisco) et ne comporte pas d'évaluation indépendante des solutions présentées.",
+      "sisr": "Étudier l'intégration de la télémétrie et des agents d'IA pour automatiser la supervision et le diagnostic des infrastructures sans fil.",
+      "limits": "Le texte repose entièrement sur un discours marketing éditeur et des annonces de produits sans validation indépendante ou retour de terrain.",
+      "why_important": "L'automatisation par IA agentique modifie la gestion quotidienne du réseau en tentant d'accélérer la remédiation des incidents. Son enjeu opérationnel réside dans le maintien du contrôle humain face à des décisions prises à la vitesse de la machine.",
+      "admin_use": "Compétence à développer : configurer la supervision automatisée et analyser les journaux de télémétrie réseau. Action de lab : déployer une sonde de mesure synthétique sur un équipement de test pour valider la remontée d'indicateurs de performance.",
+      "engineer_use": "Décision d'architecture : définir les limites d'autonomie et les politiques de validation humaine pour les actions correctives automatisées. Critère de validation : l'agent ne doit appliquer aucune modification critique sans approbation explicite ou hors d'une plage de maintenance définie.",
       "topic": "automatisation",
-      "generated_at": "2026-11-13T10:22:09.912858+00:00",
+      "generated_at": "2026-11-13T10:31:25.191067+00:00",
       "model": "gemini-3.5-flash-lite",
       "truncated": false,
-      "reviewed": false
+      "reviewed": false,
+      "summary_version": 2
     },
     {
       "id": "69e02bce673167be0d5c",
@@ -39,20 +43,24 @@
       "source_title": "Dynamic model routing: The new SD-WAN for the AI era",
       "source": "Cisco Networking",
       "published_at": "2026-11-09T20:00:59+00:00",
-      "title": "Routage dynamique des modèles et architectures réseau",
-      "summary": "Cet article analyse l'intégration du routage dynamique des modèles d'intelligence artificielle dans les architectures réseau d'entreprise, comparable au fonctionnement du SD-WAN. Face à la complexité croissante des flux et aux coûts des grands modèles de langage, cette approche utilise la télémétrie réseau et des politiques en temps réel pour orienter chaque requête vers l'endpoint optimal, qu'il s'agisse d'un modèle local spécialisé ou d'un LLM distant. L'objectif est d'optimiser la latence, les coûts en tokens et la sécurité des données tout en garantissant la performance globale des applications et des agents autonomes.",
+      "title": "Routage dynamique des modèles pour l'IA d'entreprise",
+      "summary": "Le routage dynamique des modèles agit comme un plan de contrôle intelligent pour orienter les requêtes d'IA vers le modèle le plus adapté, qu'il s'agisse d'un petit modèle local ou d'un LLM étendu. Cette approche compare la complexité, le coût, la latence et la confidentialité pour optimiser l'utilisation des ressources réseau et cloud. En s'appuyant sur la visibilité cross-domaine et des politiques d'assurance, les organisations cherchent à réduire le gaspillage de tokens et à garantir la gouvernance des données sensibles dans des architectures hybrides.",
       "key_points": [
-        "Le routage dynamique des modèles dirige les requêtes IA selon la complexité, le coût et la confidentialité.",
-        "Il permet d'utiliser des modèles locaux ou spécialisés pour réduire la consommation de tokens et la latence.",
-        "La visibilité cross-domaine et la couche d'assurance garantissent la conformité et la performance des flux."
+        "Orientation des requêtes d'IA basée sur la complexité, le coût et la confidentialité.",
+        "Utilisation conjointe de modèles locaux légers et de grands modèles cloud.",
+        "Intégration d'une couche d'assurance pour valider la performance de bout en bout."
       ],
-      "sisr": "Étudier la mise en place d'une couche de routage dynamique pour optimiser l'orientation du trafic IA et la répartition des charges entre infrastructures locales et cloud.",
-      "limits": "Discours éditeur émanant de Cisco, absence de validation indépendante des performances annoncées.",
+      "sisr": "Implémentation d'une couche de routage et de filtrage pour classifier les flux d'IA au niveau du réseau d'entreprise.",
+      "limits": "Discours éditeur émanant de Cisco, absence de benchmarks indépendants pour valider la réduction annoncée des coûts de tokens.",
+      "why_important": "Le passage d'un routage de trafic statique à un routage dynamique des requêtes d'IA modifie la gestion des flux réseaux. Son enjeu opérationnel réside dans la maîtrise des coûts de tokens et la réduction de la latence critique.",
+      "admin_use": "Développer une compétence en supervision des flux d'IA et configurer un proxy de routage pour analyser les métadonnées des requêtes sur un réseau de test.",
+      "engineer_use": "Étudier le compromis entre l'utilisation de modèles locaux à faible latence et l'appel à des LLM distants plus précis, avec comme critère de validation le respect du budget de latence et de confidentialité.",
       "topic": "automatisation",
-      "generated_at": "2026-11-13T10:22:01.705852+00:00",
+      "generated_at": "2026-11-13T10:31:21.554866+00:00",
       "model": "gemini-3.5-flash-lite",
       "truncated": false,
-      "reviewed": false
+      "reviewed": false,
+      "summary_version": 2
     }
   ]
 }
